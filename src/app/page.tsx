@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from 'primereact/button';
-import Image from 'next/image';
+import { LoadingImage } from '@/components/common/LoadingImage';
 
 export default function HomePage() {
   return (
@@ -9,13 +9,12 @@ export default function HomePage() {
       <section className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <Image
+            <LoadingImage
               src="/icon-1.png"
               alt="RouteKeeper"
               width={96}
               height={96}
               className="w-24 h-24 mx-auto mb-6"
-              style={{ width: 'auto', height: 'auto' }}
             />
             <h1 className="text-5xl md:text-6xl font-extrabold text-surface-900 dark:text-surface-0 mb-4">
               RouteKeeper
@@ -25,7 +24,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 px-4">
             <Link href="/login">
               <Button
                 label="Get Started"
@@ -53,7 +52,7 @@ export default function HomePage() {
             Why Choose RouteKeeper?
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center px-4">
             <div className="text-center">
               <div className="bg-primary-100 dark:bg-primary-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <i className="pi pi-car text-2xl text-primary"></i>

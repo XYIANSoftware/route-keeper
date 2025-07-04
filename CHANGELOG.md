@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2025-01-04
+
+### Added
+
+- **Mobile-First Design**: Implemented responsive hamburger menu for mobile devices
+- **Loading States**: Added skeleton loading components and image loading states
+- **Netlify Deployment**: Configured for deployment at route-keeper.netlify.app
+- **Performance Optimization**: Added image loading overlays and skeleton states
+
+### Changed
+
+- **Header Design**: Mobile hamburger menu with slide-out navigation
+- **Image Components**: Replaced with LoadingImage components with skeleton states
+- **Mobile Layout**: Improved responsive design with mobile-first approach
+- **Build Configuration**: Optimized for Netlify static deployment
+
+### Fixed
+
+- **Mobile Navigation**: Smooth hamburger menu with proper touch interactions
+- **Loading Performance**: Skeleton states for better perceived performance
+- **Image Loading**: Proper loading states and error handling for all images
+
 ## [1.2.1] - 2025-01-04
 
 ### Fixed

@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import Image from 'next/image';
+import { LoadingImage } from '@/components/common/LoadingImage';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -68,13 +68,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
-            <Image
+            <LoadingImage
               src="/icon-1.png"
               alt="RouteKeeper"
               width={32}
               height={32}
               className="w-8 h-8"
-              style={{ width: 'auto', height: 'auto' }}
             />
             <span className="text-2xl font-bold text-surface-900 dark:text-surface-0">
               RouteKeeper
