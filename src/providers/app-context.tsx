@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useContext, useState, useEffect } from 'react';
 import { User, Drive, Stop } from '@/types';
-import { supabase } from '@/lib/supabase';
+import { supabase, TABLES } from '@/lib/supabase-config';
 
 interface AppContextType {
   user: User | null;
@@ -33,7 +33,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         // Fetch user profile
         const { data: profile } = await supabase
-          .from('profiles')
+          .from(TABLES.profiles)
           .select('*')
           .eq('id', session.user.id)
           .single();
@@ -69,7 +69,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     if (!user) return;
 
     const { data } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .select('*')
       .eq('user_id', user.id)
       .is('end_time', null)
@@ -82,7 +82,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     if (!user) return;
 
     const { data } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .select('*')
       .eq('user_id', user.id)
       .order('start_time', { ascending: false });
@@ -139,7 +139,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     }
 
     const { data, error } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .insert({
         user_id: user.id,
         start_latitude: latitude,
@@ -176,7 +176,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     }
 
     const { error } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .update({
         end_time: new Date().toISOString(),
         end_latitude: latitude,
@@ -211,7 +211,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    const { error } = await supabase.from('stops').insert({
+    const { error } = await supabase.from(TABLES.stops).insert({
       drive_id: currentDrive.id,
       category,
       notes,
