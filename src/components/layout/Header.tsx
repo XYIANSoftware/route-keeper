@@ -11,7 +11,12 @@ export function Header() {
     <header className="header">
       <div className="header-container">
         <Link href="/" className="header-logo">
-          <i className="pi pi-truck header-logo-icon"></i>
+          <img
+            src="/icon-1.png"
+            alt="RouteKeeper Logo"
+            className="header-logo-icon"
+            style={{ width: 32, height: 32, objectFit: 'contain' }}
+          />
           <span className="header-logo-text">RouteKeeper</span>
         </Link>
 
