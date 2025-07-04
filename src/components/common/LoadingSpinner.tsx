@@ -1,12 +1,7 @@
 'use client';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
-
-interface LoadingSpinnerProps {
-  size?: 'small' | 'medium' | 'large';
-  text?: string;
-  className?: string;
-}
+import { LoadingSpinnerProps } from '@/types';
 
 export function LoadingSpinner({ size = 'medium', text, className = '' }: LoadingSpinnerProps) {
   const sizeMap = {
