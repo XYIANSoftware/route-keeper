@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
+import { FormDropdown } from '@/components/inputs/FormDropdown';
+import { FormTextarea } from '@/components/inputs/FormTextarea';
+import { useDrive } from '@/providers/app-context';
 import { Stop } from '@/types';
-import { useDrive } from '@/hooks/useDrive';
 
 interface StopFormProps {
   visible: boolean;
@@ -56,45 +57,35 @@ export function StopForm({ visible, onHide }: StopFormProps) {
       closable
     >
       <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">
-            Stop Type
-          </label>
-          <Dropdown
-            value={category}
-            onChange={e => setCategory(e.value)}
-            options={stopCategories}
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select stop type"
-            className="w-full"
-            itemTemplate={option => (
-              <div className="flex items-center space-x-2">
-                <i className={option.icon}></i>
-                <span>{option.label}</span>
-              </div>
-            )}
-            valueTemplate={option => (
-              <div className="flex items-center space-x-2">
-                <i className={option.icon}></i>
-                <span>{option.label}</span>
-              </div>
-            )}
-          />
-        </div>
+        <FormDropdown
+          label="Stop Type"
+          name="category"
+          options={stopCategories}
+          value={category}
+          onChange={value => setCategory(value as Stop['category'])}
+          placeholder="Select stop type"
+          required
+          itemTemplate={option => (
+            <div className="flex items-center space-x-2">
+              <i className={option.icon}></i>
+              <span>{option.label}</span>
+            </div>
+          )}
+          valueTemplate={option => (
+            <div className="flex items-center space-x-2">
+              <i className={option.icon}></i>
+              <span>{option.label}</span>
+            </div>
+          )}
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">
-            Notes (Optional)
-          </label>
-          <textarea
-            value={notes}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNotes(e.target.value)}
-            placeholder="Add any notes about this stop..."
-            rows={3}
-            className="w-full p-3 border border-surface-300 dark:border-surface-600 rounded-lg bg-surface-0 dark:bg-surface-900 text-surface-900 dark:text-surface-0 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
+        <FormTextarea
+          label="Notes (Optional)"
+          name="notes"
+          value={notes}
+          onChange={setNotes}
+          placeholder="Add any notes about this stop..."
+        />
 
         <div className="flex justify-end space-x-2 pt-4">
           <Button

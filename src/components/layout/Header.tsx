@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from 'primereact/button';
-import { useAuth } from '@/lib/providers/app-context';
+import { useAuth } from '@/providers/app-context';
 import Link from 'next/link';
 
 export function Header() {

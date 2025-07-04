@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
-import { useAuth } from '@/lib/providers/app-context';
+import { useAuth } from '@/providers/app-context';
 import Link from 'next/link';
 
 export function SidebarMenu() {
