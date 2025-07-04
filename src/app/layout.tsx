@@ -84,11 +84,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#0f172a" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
-      <body>
+      <body className="min-h-screen">
         <PrimeReactProvider>
           <AppContextProvider>
             <Header />
-            <main style={{ minHeight: 'calc(100vh - 4rem)', paddingTop: '4rem' }}>{children}</main>
+            <main className="min-h-screen pt-4">{children}</main>
           </AppContextProvider>
         </PrimeReactProvider>
       </body>

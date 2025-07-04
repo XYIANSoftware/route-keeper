@@ -1,6 +1,5 @@
 /* Main Styles Index */
 @import './base.css';
-@import './components/primereact-overrides.css';
 @import './components/homepage.css';
 @import './layout/header.css';
 @import './utilities/spacing.css';

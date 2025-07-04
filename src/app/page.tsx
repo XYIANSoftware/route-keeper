@@ -15,20 +15,10 @@ export default function HomePage() {
 
           <div className="hero-buttons">
             <Link href="/login">
-              <Button
-                label="Get Started"
-                icon="pi pi-play"
-                className="p-button-primary p-button-lg"
-                size="large"
-              />
+              <Button label="Get Started" icon="pi pi-play" size="large" />
             </Link>
             <Link href="/login">
-              <Button
-                label="Sign In"
-                icon="pi pi-sign-in"
-                className="p-button-outlined p-button-lg"
-                size="large"
-              />
+              <Button label="Sign In" icon="pi pi-sign-in" outlined size="large" />
             </Link>
           </div>
         </div>
@@ -91,12 +81,7 @@ export default function HomePage() {
             Join thousands of truckers who trust RouteKeeper for their drive tracking needs
           </p>
           <Link href="/login">
-            <Button
-              label="Start Your Free Trial"
-              icon="pi pi-rocket"
-              className="p-button-primary p-button-lg"
-              size="large"
-            />
+            <Button label="Start Your Free Trial" icon="pi pi-rocket" size="large" />
           </Link>
         </div>
       </section>

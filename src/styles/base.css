@@ -23,7 +23,7 @@ body {
 
 /* Focus styles for accessibility */
 *:focus {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
 
@@ -38,16 +38,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--surface-100);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--surface-300);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--surface-400);
 }
 
 /* Dark mode scrollbar */
