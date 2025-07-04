@@ -1,19 +1,7 @@
 'use client';
 
 import { Password } from 'primereact/password';
-
-interface FormPasswordProps {
-  label: string;
-  name: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  required?: boolean;
-  disabled?: boolean;
-  toggleMask?: boolean;
-  feedback?: boolean;
-}
+import { FormPasswordProps } from '@/types';
 
 export function FormPassword({
   label,

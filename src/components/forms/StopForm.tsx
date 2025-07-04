@@ -7,19 +7,14 @@ import { FormDropdown } from '@/components/inputs/FormDropdown';
 import { FormTextarea } from '@/components/inputs/FormTextarea';
 import { useDrive } from '@/providers/app-context';
 import { Stop } from '@/types';
+import { STOP_CATEGORIES } from '@/constants/stops';
 
 interface StopFormProps {
   visible: boolean;
   onHide: () => void;
 }
 
-const stopCategories = [
-  { label: 'Gas Station', value: 'gas', icon: 'pi pi-car' },
-  { label: 'Food/Restaurant', value: 'food', icon: 'pi pi-utensils' },
-  { label: 'Rest Break', value: 'rest', icon: 'pi pi-home' },
-  { label: 'Maintenance', value: 'maintenance', icon: 'pi pi-wrench' },
-  { label: 'Other', value: 'other', icon: 'pi pi-ellipsis-h' },
-];
+const stopCategories = [...STOP_CATEGORIES];
 
 export function StopForm({ visible, onHide }: StopFormProps) {
   const { addStop } = useDrive();

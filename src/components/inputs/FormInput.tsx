@@ -1,20 +1,7 @@
 'use client';
 
 import { InputText } from 'primereact/inputtext';
-import { ReactNode } from 'react';
-
-interface FormInputProps {
-  label: string;
-  name: string;
-  type?: 'text' | 'email' | 'password' | 'number';
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  icon?: ReactNode;
-  required?: boolean;
-  disabled?: boolean;
-}
+import { FormInputProps } from '@/types';
 
 export function FormInput({
   label,
