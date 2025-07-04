@@ -1,14 +1,22 @@
 import Link from 'next/link';
 import { Button } from 'primereact/button';
+import Image from 'next/image';
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-surface-50 to-primary-100 dark:from-surface-900 dark:via-surface-800 dark:to-primary-900">
+    <main className="min-h-screen">
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <i className="pi pi-truck text-6xl text-primary mb-6"></i>
+            <Image
+              src="/icon-1.png"
+              alt="RouteKeeper"
+              width={96}
+              height={96}
+              className="w-24 h-24 mx-auto mb-6"
+              style={{ width: 'auto', height: 'auto' }}
+            />
             <h1 className="text-5xl md:text-6xl font-extrabold text-surface-900 dark:text-surface-0 mb-4">
               RouteKeeper
             </h1>
@@ -39,13 +47,13 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-surface-0 dark:bg-surface-900">
+      <section className="py-16 px-4 bg-surface-0/90 dark:bg-surface-900/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-surface-900 dark:text-surface-0 mb-12">
             Why Choose RouteKeeper?
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
             <div className="text-center">
               <div className="bg-primary-100 dark:bg-primary-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <i className="pi pi-car text-2xl text-primary"></i>
@@ -98,7 +106,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-primary-50 dark:bg-primary-900">
+      <section className="py-16 px-4 bg-primary-50/90 dark:bg-primary-900/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-surface-900 dark:text-surface-0 mb-4">
             Ready to Start Tracking?

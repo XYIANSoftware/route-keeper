@@ -99,7 +99,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -108,7 +108,21 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         },
       },
     });
-    if (error) throw error;
+
+    if (error) {
+      // Provide more specific error messages
+      if (error.message.includes('Database error')) {
+        throw new Error(
+          'Database setup required. Please contact support or check if the database schema has been initialized.'
+        );
+      }
+      throw error;
+    }
+
+    // If signup is successful but email confirmation is required
+    if (data.user && !data.session) {
+      throw new Error('Please check your email to confirm your account before signing in.');
+    }
   };
 
   const signOut = async () => {

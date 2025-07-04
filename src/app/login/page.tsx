@@ -1,5 +1,11 @@
 import { AuthForm } from '@/components/forms/AuthForm';
+import { DatabaseStatus } from '@/components/common/DatabaseStatus';
 
 export default function LoginPage() {
-  return <AuthForm mode="login" />;
+  return (
+    <div>
+      <AuthForm mode="login" />
+      <DatabaseStatus />
+    </div>
+  );
 }

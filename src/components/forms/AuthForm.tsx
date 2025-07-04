@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -31,6 +32,7 @@ interface AuthFormProps {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const [isSignup, setIsSignup] = useState(mode === 'signup');
+  const [error, setError] = useState<string | null>(null);
   const { signIn, signUp, loading } = useAuth();
 
   const loginForm = useForm<LoginForm>({
@@ -43,26 +45,37 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   const onLoginSubmit = async (data: LoginForm) => {
     try {
+      setError(null);
       await signIn(data.email, data.password);
     } catch (error) {
       console.error('Login error:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred during login');
     }
   };
 
   const onSignupSubmit = async (data: SignupForm) => {
     try {
+      setError(null);
       await signUp(data.email, data.password, data.username);
     } catch (error) {
       console.error('Signup error:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred during signup');
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-primary-50 via-surface-50 to-primary-100 dark:from-surface-900 dark:via-surface-800 dark:to-primary-900">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
-            <i className="pi pi-truck text-primary text-3xl"></i>
+            <Image
+              src="/icon-1.png"
+              alt="RouteKeeper"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+              style={{ width: 'auto', height: 'auto' }}
+            />
             <span className="text-2xl font-bold text-surface-900 dark:text-surface-0">
               RouteKeeper
             </span>
@@ -73,6 +86,11 @@ export function AuthForm({ mode }: AuthFormProps) {
           <p className="text-surface-600 dark:text-surface-400">
             {isSignup ? 'Sign up to start tracking your drives' : 'Sign in to your account'}
           </p>
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
+              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+            </div>
+          )}
         </div>
 
         {isSignup ? (
@@ -150,13 +168,13 @@ export function AuthForm({ mode }: AuthFormProps) {
         )}
 
         <div className="text-center mt-6">
-          <button
+          <Button
             type="button"
+            label={isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            icon={isSignup ? 'pi pi-sign-in' : 'pi pi-user-plus'}
+            className="p-button-text p-button-secondary"
             onClick={() => setIsSignup(!isSignup)}
-            className="text-primary hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            {isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-          </button>
+          />
         </div>
       </Card>
     </div>

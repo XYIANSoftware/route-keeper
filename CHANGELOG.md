@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2025-01-04
+
+### Fixed
+
+- **Image Aspect Ratio**: Fixed Next.js Image component warnings by adding proper aspect ratio styles
+- **Database Error Handling**: Enhanced error messages for database setup issues
+- **Database Status Check**: Added component to check and display database connection status
+- **Signup Flow**: Improved error handling and user feedback for authentication issues
+
+### Added
+
+- **DatabaseStatus Component**: Shows database connection status and setup instructions
+- **Better Error Messages**: More specific error handling for database-related issues
+
+## [1.2.0] - 2025-01-04
+
+### Added
+
+- **Background Image**: Added parallax background using `public/bg-1.png`
+  - Fixed background attachment for smooth parallax effect
+  - Proper sizing and positioning for optimal display
+  - Semi-transparent overlay for better text readability
+- **Custom Logo**: Integrated `public/icon-1.png` throughout the app
+  - Updated favicon and app icons
+  - Replaced truck icon with custom logo in header
+  - Added logo to home page hero section
+- **Enhanced Visual Design**: Improved overall visual appeal
+  - Backdrop blur effects on sections
+  - Semi-transparent backgrounds for better contrast
+  - Smooth scroll behavior
+
+### Changed
+
+- **Package Version**: Updated to version 1.2.0
+- **Layout Styling**: Enhanced visual hierarchy with parallax background
+- **Header Design**: Updated with custom logo and improved transparency
+- **Home Page**: Refreshed design with new logo and background integration
+
 ## [1.1.0] - 2025-01-04
 
 ### Added
