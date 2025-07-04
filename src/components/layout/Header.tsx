@@ -8,16 +8,14 @@ export function Header() {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 bg-surface-0 border-b border-surface-200 dark:border-surface-700 shadow-sm">
-      <div className="flex items-center justify-between p-4 max-w-7xl mx-auto">
-        <Link href="/" className="flex items-center space-x-2">
-          <i className="pi pi-truck text-primary text-2xl"></i>
-          <span className="text-xl font-bold text-surface-900 dark:text-surface-0">
-            RouteKeeper
-          </span>
+    <header className="header">
+      <div className="header-container">
+        <Link href="/" className="header-logo">
+          <i className="pi pi-truck header-logo-icon"></i>
+          <span className="header-logo-text">RouteKeeper</span>
         </Link>
 
-        <div className="flex items-center space-x-2">
+        <nav className="header-nav">
           {user ? (
             <>
               <Link href={`/${user.username}/dashboard`}>
@@ -40,7 +38,7 @@ export function Header() {
               </Link>
             </>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
