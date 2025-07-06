@@ -1,18 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
+import { Message } from 'primereact/message';
 import { useAuth } from '@/hooks';
 import Link from 'next/link';
 import { LoadingImage } from '@/components';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showConfirmationMessage, setShowConfirmationMessage] = useState(false);
   const { signIn, loading } = useAuth();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Check if user was redirected from email confirmation
+    const confirmed = searchParams.get('confirmed');
+    if (confirmed === 'true') {
+      setShowConfirmationMessage(true);
+      // Hide the message after 5 seconds
+      setTimeout(() => setShowConfirmationMessage(false), 5000);
+    }
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +58,14 @@ export default function LoginPage() {
           <h1 className="text-xl font-semibold text-gray-800 m-0">Welcome Back</h1>
           <p className="text-gray-600 m-0">Sign in to your account</p>
         </div>
+
+        {showConfirmationMessage && (
+          <Message
+            severity="success"
+            text="✅ Your email has been confirmed successfully! You can now sign in."
+            className="mb-4"
+          />
+        )}
 
         <form onSubmit={handleLogin} className="flex flex-column gap-4">
           <div className="flex flex-column gap-2">
@@ -93,5 +115,13 @@ export default function LoginPage() {
         </div>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

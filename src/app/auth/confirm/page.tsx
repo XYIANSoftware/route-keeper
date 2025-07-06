@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
@@ -10,7 +10,7 @@ import { supabaseClient as supabase } from '@/lib';
 import { LoadingImage } from '@/components';
 import Link from 'next/link';
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'expired'>('loading');
@@ -76,9 +76,7 @@ export default function ConfirmEmailPage() {
   }, [searchParams, router]);
 
   const handleResendConfirmation = async () => {
-    // This would need to be implemented if you want to allow resending
-    // For now, we'll just redirect to signup
-    router.push('/signup?resend=true');
+    router.push('/auth/resend');
   };
 
   return (
@@ -165,5 +163,13 @@ export default function ConfirmEmailPage() {
         )}
       </Card>
     </div>
+  );
+}
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmEmailForm />
+    </Suspense>
   );
 }

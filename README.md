@@ -97,6 +97,8 @@ npm run dev
 ### Authentication
 
 - Secure signup/login with Supabase Auth
+- **Email Confirmation**: Required for new accounts with professional confirmation flow
+- **Resend Functionality**: Users can request new confirmation emails
 - Form validation with React Hook Form and Zod
 - Error handling and user feedback
 - Profile creation with automatic triggers
