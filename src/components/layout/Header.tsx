@@ -41,22 +41,22 @@ export function Header() {
 
   return (
     <>
-      {/* Mobile Header */}
-      <header className="lg:hidden bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
-        <div className="flex items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center space-x-3">
+      {/* Mobile Header - Fixed at top */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
+        <div className="flex align-items-center justify-content-between px-4 py-3">
+          <Link href="/" className="flex align-items-center">
             <LoadingImage
               src="/icon-1.png"
               alt="RouteKeeper"
-              width={75}
-              height={75}
-              className="w-12 h-12 rounded-lg shadow-md"
+              width={50}
+              height={50}
+              className="w-12 h-12 mr-3"
               priority
             />
             <span className="text-xl font-bold">RouteKeeper</span>
           </Link>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex align-items-center gap-2">
             {user ? (
               <Button
                 icon="pi pi-user"
@@ -80,72 +80,63 @@ export function Header() {
         </div>
       </header>
 
-      {/* Desktop Header */}
-      <header className="hidden lg:block bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-4">
-              <LoadingImage
-                src="/icon-1.png"
-                alt="RouteKeeper"
-                width={75}
-                height={75}
-                className="w-16 h-16 rounded-lg shadow-md"
-                priority
-              />
-              <div>
-                <h1 className="text-2xl font-bold">RouteKeeper</h1>
-                <p className="text-amber-200 text-sm">Professional Route Tracking</p>
-              </div>
-            </Link>
-
-            <nav className="flex items-center space-x-6">
-              {navigationItems.map(item => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors duration-200"
-                >
-                  <i className={item.icon}></i>
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </nav>
-
-            <div className="flex items-center space-x-4">
-              {user ? (
-                <>
-                  <div className="flex items-center space-x-3">
-                    <div className="text-right">
-                      <p className="text-sm font-medium">{user.username}</p>
-                      <p className="text-xs text-amber-200">Driver</p>
-                    </div>
-                    <Button
-                      icon="pi pi-sign-out"
-                      label="Sign Out"
-                      className="p-button-outlined p-button-sm"
-                      onClick={handleSignOut}
-                      loading={loading}
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center space-x-3">
-                  <Button
-                    label="Sign In"
-                    icon="pi pi-sign-in"
-                    className="p-button-outlined"
-                    onClick={() => router.push('/login')}
-                  />
-                  <Button
-                    label="Sign Up"
-                    icon="pi pi-user-plus"
-                    className="p-button-primary"
-                    onClick={() => router.push('/signup')}
-                  />
-                </div>
-              )}
+      {/* Desktop Header - Fixed at top */}
+      <header className="fixed top-0 left-0 right-0 z-50 hidden lg:block bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
+        <div className="flex align-items-center justify-content-between px-6 py-4 max-w-screen-xl mx-auto">
+          <Link href="/" className="flex align-items-center">
+            <LoadingImage
+              src="/icon-1.png"
+              alt="RouteKeeper"
+              width={50}
+              height={50}
+              className="w-12 h-12 mr-4"
+              priority
+            />
+            <div className="flex flex-column">
+              <h1 className="text-2xl font-bold m-0">RouteKeeper</h1>
+              <p className="text-amber-200 text-sm m-0">Professional Route Tracking</p>
             </div>
+          </Link>
+
+          <nav className="flex align-items-center gap-4">
+            {navigationItems.map(item => (
+              <Link key={item.label} href={item.href}>
+                <Button label={item.label} icon={item.icon} className="p-button-text text-white" />
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex align-items-center gap-3">
+            {user ? (
+              <div className="flex align-items-center gap-3">
+                <div className="text-right">
+                  <p className="text-sm font-medium m-0">{user.username}</p>
+                  <p className="text-xs text-amber-200 m-0">Driver</p>
+                </div>
+                <Button
+                  icon="pi pi-sign-out"
+                  label="Sign Out"
+                  className="p-button-outlined p-button-sm"
+                  onClick={handleSignOut}
+                  loading={loading}
+                />
+              </div>
+            ) : (
+              <div className="flex align-items-center gap-3">
+                <Button
+                  label="Sign In"
+                  icon="pi pi-sign-in"
+                  className="p-button-outlined"
+                  onClick={() => router.push('/login')}
+                />
+                <Button
+                  label="Sign Up"
+                  icon="pi pi-user-plus"
+                  className="p-button-primary"
+                  onClick={() => router.push('/signup')}
+                />
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -155,11 +146,11 @@ export function Header() {
         visible={sidebarVisible}
         position="right"
         onHide={() => setSidebarVisible(false)}
-        className="w-80 bg-gradient-to-b from-amber-900 to-amber-800 text-white"
+        className="w-20rem bg-gradient-to-b from-amber-900 to-amber-800 text-white"
       >
         <div className="p-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold">Menu</h2>
+          <div className="flex align-items-center justify-content-between mb-6">
+            <h2 className="text-xl font-bold m-0">Menu</h2>
             <Button
               icon="pi pi-times"
               className="p-button-text p-button-rounded"
@@ -167,35 +158,34 @@ export function Header() {
             />
           </div>
 
-          <nav className="space-y-2">
+          <nav className="flex flex-column gap-2">
             {mobileMenuItems.map(item => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-amber-700 transition-colors duration-200"
-                onClick={() => setSidebarVisible(false)}
-              >
-                <i className={`${item.icon} text-lg`}></i>
-                <span className="font-medium">{item.label}</span>
+              <Link key={item.label} href={item.href}>
+                <Button
+                  label={item.label}
+                  icon={item.icon}
+                  className="p-button-text text-white w-full justify-content-start"
+                  onClick={() => setSidebarVisible(false)}
+                />
               </Link>
             ))}
           </nav>
 
           {user && (
-            <div className="mt-8 pt-6 border-t border-amber-700">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center">
+            <div className="mt-6 pt-4 border-top-1 border-amber-700">
+              <div className="flex align-items-center gap-3 mb-4">
+                <div className="w-3rem h-3rem bg-amber-600 border-circle flex align-items-center justify-content-center">
                   <i className="pi pi-user text-white"></i>
                 </div>
                 <div>
-                  <p className="font-medium">{user.username}</p>
-                  <p className="text-sm text-amber-200">Driver</p>
+                  <p className="font-medium m-0">{user.username}</p>
+                  <p className="text-sm text-amber-200 m-0">Driver</p>
                 </div>
               </div>
               <Button
                 label="Sign Out"
                 icon="pi pi-sign-out"
-                className="w-full p-button-outlined"
+                className="p-button-outlined w-full"
                 onClick={() => {
                   handleSignOut();
                   setSidebarVisible(false);

@@ -7,6 +7,7 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
+import { LoadingImage } from '@/components/common/LoadingImage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,20 +27,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="min-h-screen flex align-items-center justify-content-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <Card className="w-full max-w-md shadow-4">
         <div className="text-center mb-6">
-          <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
-            <i className="pi pi-truck text-blue-600 text-3xl"></i>
+          <Link href="/" className="flex align-items-center justify-content-center mb-4">
+            <LoadingImage
+              src="/icon-1.png"
+              alt="RouteKeeper"
+              width={50}
+              height={50}
+              className="w-12 h-12 mr-3"
+              priority
+            />
             <span className="text-2xl font-bold text-gray-800">RouteKeeper</span>
           </Link>
-          <h1 className="text-xl font-semibold text-gray-800">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your account</p>
+          <h1 className="text-xl font-semibold text-gray-800 m-0">Welcome Back</h1>
+          <p className="text-gray-600 m-0">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+        <form onSubmit={handleLogin} className="flex flex-column gap-4">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-700">
               Email
             </label>
             <InputText
@@ -53,8 +61,8 @@ export default function LoginPage() {
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="password" className="text-sm font-medium text-gray-700">
               Password
             </label>
             <Password
@@ -65,6 +73,7 @@ export default function LoginPage() {
               className="w-full"
               required
               feedback={false}
+              toggleMask
             />
           </div>
 
@@ -72,7 +81,7 @@ export default function LoginPage() {
             type="submit"
             label="Sign In"
             icon="pi pi-sign-in"
-            className="w-full"
+            className="w-full p-button-primary"
             loading={loading}
           />
         </form>

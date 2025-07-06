@@ -1,5 +1,8 @@
 'use client';
 
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+
 export function FeaturesSection() {
   const features = [
     {
@@ -41,47 +44,51 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-amber-100 to-amber-200">
+    <section className="py-8 px-4 bg-gradient-to-br from-amber-100 to-amber-200">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-6">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-4 m-0">
             Why Choose RouteKeeper?
           </h2>
-          <p className="text-xl text-amber-700 max-w-3xl mx-auto">
+          <p className="text-xl text-amber-700 max-w-3xl mx-auto m-0">
             Professional tools designed specifically for truck drivers to optimize their routes and
             improve efficiency.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((feature, index) => (
-            <div
+            <Card
               key={index}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-amber-200/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group"
+              className="shadow-4 border-1 border-amber-200 hover:shadow-6 transition-all duration-300 group"
             >
-              <div
-                className={`w-16 h-16 ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-              >
-                <i className={`${feature.icon} text-white text-2xl`}></i>
-              </div>
+              <div className="text-center p-4">
+                <div
+                  className={`w-4rem h-4rem ${feature.color} border-round-xl flex align-items-center justify-content-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <i className={`${feature.icon} text-white text-2xl`}></i>
+                </div>
 
-              <h3 className="text-2xl font-bold text-amber-900 mb-4">{feature.title}</h3>
+                <h3 className="text-2xl font-bold text-amber-900 mb-3 m-0">{feature.title}</h3>
 
-              <p className="text-amber-700 leading-relaxed">{feature.description}</p>
+                <p className="text-amber-700 line-height-3 mb-4 m-0">{feature.description}</p>
 
-              <div className="mt-6 pt-4 border-t border-amber-200/50">
-                <div className="flex items-center text-cyan-600 font-semibold">
-                  <span>Learn more</span>
-                  <i className="pi pi-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                <div className="pt-3 border-top-1 border-amber-200">
+                  <Button
+                    label="Learn more"
+                    icon="pi pi-arrow-right"
+                    className="p-button-text text-cyan-600 font-semibold group-hover:translate-x-1 transition-transform duration-300"
+                    iconPos="right"
+                  />
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
 
         {/* Cyan accent line */}
-        <div className="mt-16 flex justify-center">
-          <div className="w-32 h-1 bg-cyan-400 rounded-full"></div>
+        <div className="flex justify-content-center mt-8">
+          <div className="w-8rem h-1 bg-cyan-400 border-round"></div>
         </div>
       </div>
     </section>

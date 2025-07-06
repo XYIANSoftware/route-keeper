@@ -80,17 +80,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/icon-1.png" />
         <link rel="apple-touch-icon" href="/icon-1.png" />
-        <link rel="icon" href="/icon-1.png" />
-        <link rel="apple-touch-icon" href="/icon-1.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
-      <body className="min-h-screen parallax-bg">
+      <body className="min-h-screen">
         <PrimeReactProvider>
           <AppContextProvider>
             <Header />
-            <main className="min-h-screen pt-16">{children}</main>
+            <main className="pt-20 lg:pt-24">{children}</main>
           </AppContextProvider>
         </PrimeReactProvider>
       </body>
