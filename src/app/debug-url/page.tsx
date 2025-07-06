@@ -57,7 +57,7 @@ function DebugUrlForm() {
                   <code>token_hash</code>: The confirmation token
                 </li>
                 <li>
-                  <code>type</code>: "signup" for email confirmation
+                  <code>type</code>: &quot;signup&quot; for email confirmation
                 </li>
               </ul>
             </div>
@@ -79,7 +79,7 @@ function DebugUrlForm() {
                   <code>token</code>: Confirmation token
                 </li>
                 <li>
-                  <code>type</code>: "signup" for email confirmation
+                  <code>type</code>: &quot;signup&quot; for email confirmation
                 </li>
               </ul>
             </div>
