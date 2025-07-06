@@ -30,22 +30,23 @@ export function Header() {
           {user ? (
             <>
               <Link href={`/${user.username}/dashboard`}>
-                <Button label="Dashboard" icon="pi pi-home" className="p-button-text" />
+                <Button label="Dashboard" icon="pi pi-home" text />
               </Link>
               <Button
                 label="Sign Out"
                 icon="pi pi-sign-out"
-                className="p-button-outlined p-button-danger"
+                outlined
+                severity="danger"
                 onClick={signOut}
               />
             </>
           ) : (
             <>
               <Link href="/login">
-                <Button label="Login" icon="pi pi-sign-in" className="p-button-outlined" />
+                <Button label="Login" icon="pi pi-sign-in" outlined />
               </Link>
               <Link href="/login">
-                <Button label="Sign Up" icon="pi pi-user-plus" className="p-button-primary" />
+                <Button label="Sign Up" icon="pi pi-user-plus" />
               </Link>
             </>
           )}
