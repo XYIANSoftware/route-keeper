@@ -8,7 +8,7 @@ export function CTASection() {
   const { user: authUser } = useAuth();
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-amber-50 to-amber-100">
+    <section className="py-20 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <div className="bg-gradient-to-br from-amber-800 to-amber-900 rounded-3xl p-12 shadow-2xl border border-amber-200/20 relative overflow-hidden">
           {/* Background pattern */}

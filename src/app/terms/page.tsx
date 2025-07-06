@@ -7,7 +7,7 @@ import { LoadingImage } from '@/components/common/LoadingImage';
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-amber-100 to-amber-200 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         <Card className="shadow-4 border-1 border-amber-200">
           <div className="text-center mb-8">

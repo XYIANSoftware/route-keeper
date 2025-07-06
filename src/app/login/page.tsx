@@ -27,7 +27,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex align-items-center justify-content-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex align-items-center justify-content-center p-4">
       <Card className="w-full max-w-md shadow-4">
         <div className="text-center mb-6">
           <Link href="/" className="flex align-items-center justify-content-center mb-4">

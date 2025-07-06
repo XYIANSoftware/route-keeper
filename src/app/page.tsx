@@ -7,7 +7,7 @@ import { CTASection } from '@/components/sections/CTASection';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-amber-100 to-amber-200">
+    <div className="w-full max-w-6xl mx-auto px-4">
       {/* Hero Section */}
       <HeroSection />
 

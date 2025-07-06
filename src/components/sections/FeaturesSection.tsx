@@ -44,7 +44,7 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-8 px-4 bg-gradient-to-br from-amber-100 to-amber-200">
+    <section className="py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-4 m-0">

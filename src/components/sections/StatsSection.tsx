@@ -29,7 +29,7 @@ export function StatsSection() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-amber-800 to-amber-900 relative overflow-hidden">
+    <section className="py-20 px-4 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30px_30px,rgba(255,255,255,0.1)_2px,transparent_2px)] bg-[length:60px_60px]"></div>
 

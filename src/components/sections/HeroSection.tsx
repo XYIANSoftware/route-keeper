@@ -10,7 +10,7 @@ export function HeroSection() {
   const { user: authUser } = useAuth();
 
   return (
-    <section className="flex flex-column align-items-center justify-content-center min-h-screen p-4 bg-gradient-to-br from-amber-900 via-amber-800 to-amber-700 text-white relative overflow-hidden">
+    <section className="flex flex-column align-items-center justify-content-center min-h-screen p-4 text-white relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30px_30px,rgba(255,255,255,0.1)_2px,transparent_2px)] bg-[length:60px_60px]"></div>
 

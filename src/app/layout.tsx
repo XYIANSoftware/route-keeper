@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PrimeReactProvider>
           <AppContextProvider>
             <Header />
-            <main className="pt-20 lg:pt-24">{children}</main>
+            <main>{children}</main>
           </AppContextProvider>
         </PrimeReactProvider>
       </body>

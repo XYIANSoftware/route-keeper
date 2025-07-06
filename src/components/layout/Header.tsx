@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
+import { Image } from 'primereact/image';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LoadingImage } from '@/components/common/LoadingImage';
 
 export function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -45,13 +45,12 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
         <div className="flex align-items-center justify-content-between px-4 py-3">
           <Link href="/" className="flex align-items-center">
-            <LoadingImage
+            <Image
               src="/icon-1.png"
               alt="RouteKeeper"
-              width={50}
-              height={50}
+              width="50"
+              height="50"
               className="w-12 h-12 mr-3"
-              priority
             />
             <span className="text-xl font-bold">RouteKeeper</span>
           </Link>
@@ -84,13 +83,12 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 hidden lg:block bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
         <div className="flex align-items-center justify-content-between px-6 py-4 max-w-screen-xl mx-auto">
           <Link href="/" className="flex align-items-center">
-            <LoadingImage
+            <Image
               src="/icon-1.png"
               alt="RouteKeeper"
-              width={50}
-              height={50}
+              width="50"
+              height="50"
               className="w-12 h-12 mr-4"
-              priority
             />
             <div className="flex flex-column">
               <h1 className="text-2xl font-bold m-0">RouteKeeper</h1>
