@@ -1,14 +1,14 @@
 'use client';
 
 import { ReactNode, createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { User, Drive, Stop } from '@/types';
-import { supabaseConfigClient as supabase, TABLES } from '@/lib';
+import { User, Drive, Stop, SignupResult } from '@/types';
+import { supabaseClient as supabase, TABLES } from '@/lib';
 
 interface AppContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, username: string) => Promise<void>;
+  signUp: (email: string, password: string, username: string) => Promise<SignupResult>;
   signOut: () => Promise<void>;
   currentDrive: Drive | null;
   drives: Drive[];
@@ -106,6 +106,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       );
     }
 
+    console.log('Starting signup process for:', email);
+
     // Create the user account
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -114,6 +116,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         data: {
           username,
         },
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
       },
     });
 
@@ -125,6 +128,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       // Handle rate limiting
       if (error.status === 429) {
         throw new Error('Too many signup attempts. Please wait a moment before trying again.');
+      }
+
+      // Handle user already exists
+      if (error.message.includes('User already registered')) {
+        throw new Error(
+          'An account with this email already exists. Please try signing in instead.'
+        );
       }
 
       // Provide more specific error messages
@@ -158,15 +168,30 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       throw new Error(`Signup failed: ${error.message}`);
     }
 
-    // If signup is successful but email confirmation is required
+    console.log('Signup response:', { user: data.user, session: data.session });
+
+    // Check if email confirmation is required
     if (data.user && !data.session) {
-      // Profile should have been created by the trigger function
-      // No need to manually create it
-      throw new Error('Please check your email to confirm your account before signing in.');
+      // Email confirmation is required - this is the expected flow
+      console.log('Email confirmation required for user:', data.user.id);
+
+      // Return success with confirmation message
+      return {
+        success: true,
+        user: null, // User will be set after confirmation
+        requiresConfirmation: true,
+        message: `Account created successfully! We've sent a confirmation email to ${email}. Please check your email and click the confirmation link to complete your registration.`,
+      };
     }
 
     // If we get here, signup was successful and user is automatically signed in
     console.log('Signup successful and user signed in automatically');
+    return {
+      success: true,
+      user: null, // User will be set by auth state change
+      requiresConfirmation: false,
+      message: 'Account created and signed in successfully!',
+    };
   };
 
   const signOut = async () => {

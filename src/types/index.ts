@@ -153,12 +153,20 @@ export interface DriveStats {
   mostCommonStopType: string;
 }
 
+// Signup result type
+export interface SignupResult {
+  success: boolean;
+  user: User | null;
+  requiresConfirmation: boolean;
+  message: string;
+}
+
 // Context Types
 export interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, username: string) => Promise<void>;
+  signUp: (email: string, password: string, username: string) => Promise<SignupResult>;
   signOut: () => Promise<void>;
 }
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { supabaseConfigClient as supabase } from '@/lib';
+import { supabaseClient as supabase } from '@/lib';
 
 export function DatabaseStatus() {
   const [status, setStatus] = useState<'checking' | 'connected' | 'error'>('checking');

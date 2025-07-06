@@ -1,8 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
-import { API_ENDPOINTS } from '@/constants/app';
+import { createBrowserClient } from '@supabase/ssr';
 
-// Create Supabase client
-export const supabase = createClient(API_ENDPOINTS.supabase.url, API_ENDPOINTS.supabase.anonKey, {
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://fuiyuaxpghfajxmzichk.supabase.co';
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1aXl1YXhwZ2hmYWp4bXppY2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTM2ODIsImV4cCI6MjA2NzIyOTY4Mn0.4PMRGQjA1ldffILrQza86DiomvgDiQn6kcyxKhojaXk';
+
+// Create unified Supabase client with consistent configuration
+export const supabase = createBrowserClient(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -10,11 +15,6 @@ export const supabase = createClient(API_ENDPOINTS.supabase.url, API_ENDPOINTS.s
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     storageKey: 'sb-auth-token',
     flowType: 'pkce',
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10,
-    },
   },
   global: {
     headers: {

@@ -9,7 +9,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks';
-import { testSupabaseConnection, testSignup, testDatabaseConnection } from '@/lib';
 import Link from 'next/link';
 import { LoadingImage } from '@/components';
 
@@ -57,65 +56,19 @@ export function AuthForm({ mode }: AuthFormProps) {
   const onSignupSubmit = async (data: SignupForm) => {
     try {
       console.log('Attempting signup with:', { email: data.email, username: data.username });
-      await signUp(data.email, data.password, data.username);
-      console.log('Signup successful');
+      const result = await signUp(data.email, data.password, data.username);
+      console.log('Signup result:', result);
+
+      if (result.success) {
+        if (result.requiresConfirmation) {
+          alert(`✅ ${result.message}`);
+        } else {
+          alert(`✅ ${result.message}`);
+        }
+      }
     } catch (error) {
       console.error('Signup error:', error);
       alert(`Signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
-
-  const testConnection = async () => {
-    try {
-      const result = await testSupabaseConnection();
-      alert(
-        result
-          ? 'Supabase connection successful!'
-          : 'Supabase connection failed. Check console for details.'
-      );
-    } catch (error) {
-      alert(`Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
-
-  const testSignupFunction = async () => {
-    try {
-      const testEmail = `test${Date.now()}@example.com`;
-      const testPassword = 'testpassword123';
-
-      console.log('Testing signup with:', { testEmail, testPassword });
-
-      const result = await testSignup(testEmail, testPassword);
-
-      if (result.success) {
-        alert('Test signup successful! Check console for details.');
-      } else {
-        const errorMessage =
-          result.error && typeof result.error === 'object' && 'message' in result.error
-            ? result.error.message
-            : 'Unknown error';
-        alert(`Test signup failed: ${errorMessage}`);
-      }
-    } catch (error) {
-      alert(`Test signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
-
-  const testDatabase = async () => {
-    try {
-      const result = await testDatabaseConnection();
-
-      if (result.success) {
-        alert('Database connection successful! Check console for details.');
-      } else {
-        const errorMessage =
-          result.error && typeof result.error === 'object' && 'message' in result.error
-            ? result.error.message
-            : 'Unknown error';
-        alert(`Database connection failed: ${errorMessage}`);
-      }
-    } catch (error) {
-      alert(`Database test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -183,30 +136,6 @@ export function AuthForm({ mode }: AuthFormProps) {
               icon="pi pi-user-plus"
               className="w-full p-button-primary"
               loading={loading}
-            />
-
-            <Button
-              type="button"
-              label="Test Connection"
-              icon="pi pi-refresh"
-              className="w-full p-button-secondary"
-              onClick={testConnection}
-            />
-
-            <Button
-              type="button"
-              label="Test Signup"
-              icon="pi pi-user-plus"
-              className="w-full p-button-outlined"
-              onClick={testSignupFunction}
-            />
-
-            <Button
-              type="button"
-              label="Test Database"
-              icon="pi pi-database"
-              className="w-full p-button-outlined"
-              onClick={testDatabase}
             />
           </form>
         ) : (

@@ -6,6 +6,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { useAuth } from '@/hooks';
+import type { SignupResult } from '@/types';
 import Link from 'next/link';
 
 export default function SignupPage() {
@@ -18,8 +19,16 @@ export default function SignupPage() {
     e.preventDefault();
     try {
       console.log('Attempting signup with:', { email, username });
-      await signUp(email, password, username);
-      console.log('Signup successful');
+      const result = await signUp(email, password, username);
+      console.log('Signup result:', result);
+
+      if (result.success) {
+        if (result.requiresConfirmation) {
+          alert(`✅ ${result.message}`);
+        } else {
+          alert(`✅ ${result.message}`);
+        }
+      }
     } catch (error) {
       console.error('Signup error:', error);
       alert(`Signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
