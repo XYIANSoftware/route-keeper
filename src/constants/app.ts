@@ -1,7 +1,7 @@
 export const APP_CONFIG = {
   name: 'RouteKeeper',
   description: 'Mobile-first drive tracker for truckers',
-  version: '1.2.1',
+  version: '2.0.0',
   url:
     process.env.NODE_ENV === 'production'
       ? 'https://route-keeper.netlify.app'
