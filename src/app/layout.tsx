@@ -1,7 +1,6 @@
 import './globals.css';
-import { PrimeReactProvider } from '@/providers/primereact-provider';
-import { AppContextProvider } from '@/providers/app-context';
-import { Header } from '@/components/layout/Header';
+import { PrimeReactProvider, AppContextProvider } from '@/providers';
+import { Header } from '@/components';
 
 export const metadata = {
   title: {
@@ -78,17 +77,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#0f172a" />
+        <link rel="icon" href="/icon-1.png" />
+        <link rel="apple-touch-icon" href="/icon-1.png" />
+        <meta name="theme-color" content="#7c2d12" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className="min-h-screen">
         <PrimeReactProvider>
           <AppContextProvider>
             <Header />
-            <main className="min-h-screen pt-4">{children}</main>
+            <main>{children}</main>
           </AppContextProvider>
         </PrimeReactProvider>
       </body>

@@ -1,14 +1,14 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState, useEffect } from 'react';
-import { User, Drive, Stop } from '@/types';
-import { supabase } from '@/lib/supabase';
+import { ReactNode, createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { User, Drive, Stop, SignupResult } from '@/types';
+import { supabaseClient as supabase, TABLES } from '@/lib';
 
 interface AppContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, username: string) => Promise<void>;
+  signUp: (email: string, password: string, username: string) => Promise<SignupResult>;
   signOut: () => Promise<void>;
   currentDrive: Drive | null;
   drives: Drive[];
@@ -33,7 +33,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         // Fetch user profile
         const { data: profile } = await supabase
-          .from('profiles')
+          .from(TABLES.profiles)
           .select('*')
           .eq('id', session.user.id)
           .single();
@@ -54,6 +54,31 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  const loadCurrentDrive = useCallback(async () => {
+    if (!user) return;
+
+    const { data } = await supabase
+      .from(TABLES.drives)
+      .select('*')
+      .eq('user_id', user.id)
+      .is('end_time', null)
+      .single();
+
+    setCurrentDrive(data);
+  }, [user]);
+
+  const loadDrives = useCallback(async () => {
+    if (!user) return;
+
+    const { data } = await supabase
+      .from(TABLES.drives)
+      .select('*')
+      .eq('user_id', user.id)
+      .order('start_time', { ascending: false });
+
+    setDrives(data || []);
+  }, [user]);
+
   // Load current drive and drives when user changes
   useEffect(() => {
     if (user) {
@@ -63,32 +88,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       setCurrentDrive(null);
       setDrives([]);
     }
-  }, [user]);
-
-  const loadCurrentDrive = async () => {
-    if (!user) return;
-
-    const { data } = await supabase
-      .from('drives')
-      .select('*')
-      .eq('user_id', user.id)
-      .is('end_time', null)
-      .single();
-
-    setCurrentDrive(data);
-  };
-
-  const loadDrives = async () => {
-    if (!user) return;
-
-    const { data } = await supabase
-      .from('drives')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('start_time', { ascending: false });
-
-    setDrives(data || []);
-  };
+  }, [user, loadCurrentDrive, loadDrives]);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -99,16 +99,99 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-    const { error } = await supabase.auth.signUp({
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      throw new Error(
+        'Supabase configuration missing. Please check your environment variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY).'
+      );
+    }
+
+    console.log('Starting signup process for:', email);
+
+    // Create the user account
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           username,
         },
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
       },
     });
-    if (error) throw error;
+
+    if (error) {
+      console.error('Signup error details:', error);
+      console.error('Error code:', error.status);
+      console.error('Error message:', error.message);
+
+      // Handle rate limiting
+      if (error.status === 429) {
+        throw new Error('Too many signup attempts. Please wait a moment before trying again.');
+      }
+
+      // Handle user already exists
+      if (error.message.includes('User already registered')) {
+        throw new Error(
+          'An account with this email already exists. Please try signing in instead.'
+        );
+      }
+
+      // Provide more specific error messages
+      if (
+        error.message.includes('Database error') ||
+        error.message.includes('relation') ||
+        error.message.includes('does not exist') ||
+        error.message.includes('table') ||
+        error.message.includes('schema')
+      ) {
+        throw new Error(
+          'Database setup required. Please run the SQL setup script in your Supabase dashboard. The profiles table or trigger function may not exist.'
+        );
+      }
+
+      if (error.message.includes('Invalid API key') || error.status === 401) {
+        throw new Error(
+          'Invalid Supabase configuration. Please check your API keys in the environment variables.'
+        );
+      }
+
+      if (error.message.includes('Email not confirmed')) {
+        throw new Error('Please check your email to confirm your account before signing in.');
+      }
+
+      if (error.message.includes('JWT') || error.status === 403) {
+        throw new Error('Authentication error. Please check your Supabase configuration.');
+      }
+
+      // Generic error with more details
+      throw new Error(`Signup failed: ${error.message}`);
+    }
+
+    console.log('Signup response:', { user: data.user, session: data.session });
+
+    // Check if email confirmation is required
+    if (data.user && !data.session) {
+      // Email confirmation is required - this is the expected flow
+      console.log('Email confirmation required for user:', data.user.id);
+
+      // Return success with confirmation message
+      return {
+        success: true,
+        user: null, // User will be set after confirmation
+        requiresConfirmation: true,
+        message: `Account created successfully! We've sent a confirmation email to ${email}. Please check your email and click the confirmation link to complete your registration.`,
+      };
+    }
+
+    // If we get here, signup was successful and user is automatically signed in
+    console.log('Signup successful and user signed in automatically');
+    return {
+      success: true,
+      user: null, // User will be set by auth state change
+      requiresConfirmation: false,
+      message: 'Account created and signed in successfully!',
+    };
   };
 
   const signOut = async () => {
@@ -139,7 +222,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     }
 
     const { data, error } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .insert({
         user_id: user.id,
         start_latitude: latitude,
@@ -176,7 +259,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     }
 
     const { error } = await supabase
-      .from('drives')
+      .from(TABLES.drives)
       .update({
         end_time: new Date().toISOString(),
         end_latitude: latitude,
@@ -211,7 +294,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    const { error } = await supabase.from('stops').insert({
+    const { error } = await supabase.from(TABLES.stops).insert({
       drive_id: currentDrive.id,
       category,
       notes,

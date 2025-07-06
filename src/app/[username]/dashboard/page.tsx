@@ -3,13 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { DriveCard } from '@/components/DriveCard';
-import { StopForm } from '@/components/forms/StopForm';
-import { DriveList } from '@/components/DriveList';
-import { SidebarMenu } from '@/components/layout/SidebarMenu';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { useAuth } from '@/hooks/useAuth';
-import { useDrive } from '@/hooks/useDrive';
+import { DriveCard, StopForm, DriveList, SidebarMenu, LoadingSpinner } from '@/components';
+import { useAuth, useDrive } from '@/hooks';
 import { useParams } from 'next/navigation';
 
 export default function DashboardPage() {

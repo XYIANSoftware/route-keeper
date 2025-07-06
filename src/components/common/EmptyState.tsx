@@ -1,15 +1,7 @@
 'use client';
 
 import { Button } from 'primereact/button';
-
-interface EmptyStateProps {
-  icon: string;
-  title: string;
-  description: string;
-  actionLabel?: string;
-  onAction?: () => void;
-  className?: string;
-}
+import { EmptyStateProps } from '@/types';
 
 export function EmptyState({
   icon,

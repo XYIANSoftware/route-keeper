@@ -1,27 +1,7 @@
 'use client';
 
 import { Dropdown } from 'primereact/dropdown';
-import { ReactNode } from 'react';
-
-interface DropdownOption {
-  label: string;
-  value: string | number;
-  icon?: string;
-}
-
-interface FormDropdownProps {
-  label: string;
-  name: string;
-  options: DropdownOption[];
-  value: string | number | null;
-  onChange: (value: string | number | null) => void;
-  placeholder?: string;
-  error?: string;
-  required?: boolean;
-  disabled?: boolean;
-  itemTemplate?: (option: DropdownOption) => ReactNode;
-  valueTemplate?: (option: DropdownOption) => ReactNode;
-}
+import { FormDropdownProps } from '@/types';
 
 export function FormDropdown({
   label,

@@ -5,7 +5,7 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { Stop } from '@/types';
-import { useDrive } from '@/hooks/useDrive';
+import { useDrive } from '@/hooks';
 
 interface StopFormProps {
   visible: boolean;

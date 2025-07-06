@@ -1,0 +1,47 @@
+// Script to debug confirmation URL parameters
+console.log('🔍 Debugging Supabase email confirmation URL format...\n');
+
+console.log('📋 Expected Supabase email confirmation URL parameters:');
+console.log('');
+console.log('1. PKCE Flow (recommended):');
+console.log('   - token_hash: The confirmation token');
+console.log('   - type: "signup" for email confirmation');
+console.log('   - Example: /auth/confirm?token_hash=XXX&type=signup');
+console.log('');
+console.log('2. Alternative formats:');
+console.log('   - access_token & refresh_token (older format)');
+console.log('   - token & type (some configurations)');
+console.log('');
+console.log('📝 Current implementation expects:');
+console.log('   - token_hash parameter');
+console.log('   - type parameter');
+console.log('   - Uses supabase.auth.verifyOtp()');
+console.log('');
+console.log('🔧 If confirmation links are failing:');
+console.log('');
+console.log('1. Check the actual URL in the email:');
+console.log('   - Look for the confirmation link in your email');
+console.log('   - Copy the full URL and check parameters');
+console.log('');
+console.log('2. Common URL formats:');
+console.log('   - PKCE: /auth/confirm?token_hash=XXX&type=signup');
+console.log('   - JWT: /auth/confirm?access_token=XXX&refresh_token=XXX&type=signup');
+console.log('   - Legacy: /auth/confirm?token=XXX&type=signup');
+console.log('');
+console.log('3. Supabase Dashboard settings to check:');
+console.log('   - Authentication > Settings > Site URL');
+console.log('   - Authentication > Settings > Redirect URLs');
+console.log('   - Authentication > Email Templates > Confirm signup');
+console.log('');
+console.log('4. If using localhost:');
+console.log('   - Ensure Site URL includes http://localhost:3000');
+console.log('   - Add http://localhost:3000/auth/confirm to Redirect URLs');
+console.log('');
+console.log('📧 Next steps:');
+console.log('1. Check your confirmation email URL format');
+console.log('2. Compare with expected format above');
+console.log('3. Update confirmation page if needed');
+console.log('4. Verify Supabase dashboard settings');
+
+console.log('\n✅ Debug information displayed!');
+console.log('Please check your email confirmation link format and compare with the above.');

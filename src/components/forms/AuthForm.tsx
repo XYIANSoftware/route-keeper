@@ -8,8 +8,9 @@ import { FormPassword } from '@/components/inputs/FormPassword';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks';
 import Link from 'next/link';
+import { LoadingImage } from '@/components';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -43,26 +44,47 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   const onLoginSubmit = async (data: LoginForm) => {
     try {
+      console.log('Attempting login with:', { email: data.email });
       await signIn(data.email, data.password);
+      console.log('Login successful');
     } catch (error) {
       console.error('Login error:', error);
+      alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
   const onSignupSubmit = async (data: SignupForm) => {
     try {
-      await signUp(data.email, data.password, data.username);
+      console.log('Attempting signup with:', { email: data.email, username: data.username });
+      const result = await signUp(data.email, data.password, data.username);
+      console.log('Signup result:', result);
+
+      if (result.success) {
+        if (result.requiresConfirmation) {
+          alert(`✅ ${result.message}`);
+        } else {
+          alert(`✅ ${result.message}`);
+        }
+      }
     } catch (error) {
       console.error('Signup error:', error);
+      alert(`Signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-primary-50 via-surface-50 to-primary-100 dark:from-surface-900 dark:via-surface-800 dark:to-primary-900">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
-            <i className="pi pi-truck text-primary text-3xl"></i>
+            <LoadingImage
+              src="/icon-1.png"
+              alt="RouteKeeper"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+              priority
+            />
             <span className="text-2xl font-bold text-surface-900 dark:text-surface-0">
               RouteKeeper
             </span>
@@ -150,13 +172,13 @@ export function AuthForm({ mode }: AuthFormProps) {
         )}
 
         <div className="text-center mt-6">
-          <button
+          <Button
             type="button"
+            label={isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            icon={isSignup ? 'pi pi-sign-in' : 'pi pi-user-plus'}
+            className="p-button-text p-button-secondary"
             onClick={() => setIsSignup(!isSignup)}
-            className="text-primary hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            {isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
-          </button>
+          />
         </div>
       </Card>
     </div>

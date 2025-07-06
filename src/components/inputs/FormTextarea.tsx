@@ -1,16 +1,6 @@
 'use client';
 
-interface FormTextareaProps {
-  label: string;
-  name: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  required?: boolean;
-  disabled?: boolean;
-  rows?: number;
-}
+import { FormTextareaProps } from '@/types';
 
 export function FormTextarea({
   label,

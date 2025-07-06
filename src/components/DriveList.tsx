@@ -5,7 +5,7 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { DriveWithStops } from '@/types';
 import Link from 'next/link';
-import { useDrive } from '@/hooks/useDrive';
+import { useDrive } from '@/hooks';
 
 export function DriveList() {
   const { drives, loading } = useDrive();

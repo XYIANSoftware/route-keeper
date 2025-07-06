@@ -1,8 +1,11 @@
 export const APP_CONFIG = {
   name: 'RouteKeeper',
   description: 'Mobile-first drive tracker for truckers',
-  version: '1.1.0',
-  url: 'https://routekeeper.app',
+  version: '2.0.0',
+  url:
+    process.env.NODE_ENV === 'production'
+      ? 'https://route-keeper.netlify.app'
+      : 'http://localhost:3000',
   supportEmail: 'support@routekeeper.app',
 } as const;
 
