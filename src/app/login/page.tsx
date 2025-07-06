@@ -31,16 +31,10 @@ export default function LoginPage() {
         <div className="text-center mb-6">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-4">
             <i className="pi pi-truck text-blue-600 text-3xl"></i>
-            <span className="text-2xl font-bold text-gray-800">
-              RouteKeeper
-            </span>
+            <span className="text-2xl font-bold text-gray-800">RouteKeeper</span>
           </Link>
-          <h1 className="text-xl font-semibold text-gray-800">
-            Welcome Back
-          </h1>
-          <p className="text-gray-600">
-            Sign in to your account
-          </p>
+          <h1 className="text-xl font-semibold text-gray-800">Welcome Back</h1>
+          <p className="text-gray-600">Sign in to your account</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -52,7 +46,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="w-full"
               required
@@ -66,7 +60,7 @@ export default function LoginPage() {
             <Password
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full"
               required
@@ -84,11 +78,8 @@ export default function LoginPage() {
         </form>
 
         <div className="text-center mt-6">
-          <Link 
-            href="/signup" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            Don't have an account? Sign up
+          <Link href="/signup" className="text-blue-600 hover:text-blue-800 transition-colors">
+            Don&apos;t have an account? Sign up
           </Link>
         </div>
       </Card>

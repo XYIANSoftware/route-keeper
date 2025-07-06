@@ -33,7 +33,6 @@ interface AuthFormProps {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const [isSignup, setIsSignup] = useState(mode === 'signup');
-  const [error, setError] = useState<string | null>(null);
   const { signIn, signUp, loading } = useAuth();
 
   const loginForm = useForm<LoginForm>({
@@ -69,7 +68,11 @@ export function AuthForm({ mode }: AuthFormProps) {
   const testConnection = async () => {
     try {
       const result = await testSupabaseConnection();
-      alert(result ? 'Supabase connection successful!' : 'Supabase connection failed. Check console for details.');
+      alert(
+        result
+          ? 'Supabase connection successful!'
+          : 'Supabase connection failed. Check console for details.'
+      );
     } catch (error) {
       alert(`Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -79,17 +82,18 @@ export function AuthForm({ mode }: AuthFormProps) {
     try {
       const testEmail = `test${Date.now()}@example.com`;
       const testPassword = 'testpassword123';
-      
+
       console.log('Testing signup with:', { testEmail, testPassword });
-      
+
       const result = await testSignup(testEmail, testPassword);
-      
+
       if (result.success) {
         alert('Test signup successful! Check console for details.');
       } else {
-        const errorMessage = result.error && typeof result.error === 'object' && 'message' in result.error 
-          ? result.error.message 
-          : 'Unknown error';
+        const errorMessage =
+          result.error && typeof result.error === 'object' && 'message' in result.error
+            ? result.error.message
+            : 'Unknown error';
         alert(`Test signup failed: ${errorMessage}`);
       }
     } catch (error) {
@@ -100,13 +104,14 @@ export function AuthForm({ mode }: AuthFormProps) {
   const testDatabase = async () => {
     try {
       const result = await testDatabaseConnection();
-      
+
       if (result.success) {
         alert('Database connection successful! Check console for details.');
       } else {
-        const errorMessage = result.error && typeof result.error === 'object' && 'message' in result.error 
-          ? result.error.message 
-          : 'Unknown error';
+        const errorMessage =
+          result.error && typeof result.error === 'object' && 'message' in result.error
+            ? result.error.message
+            : 'Unknown error';
         alert(`Database connection failed: ${errorMessage}`);
       }
     } catch (error) {
@@ -137,11 +142,6 @@ export function AuthForm({ mode }: AuthFormProps) {
           <p className="text-surface-600 dark:text-surface-400">
             {isSignup ? 'Sign up to start tracking your drives' : 'Sign in to your account'}
           </p>
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
-              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
-            </div>
-          )}
         </div>
 
         {isSignup ? (
@@ -184,7 +184,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               className="w-full p-button-primary"
               loading={loading}
             />
-            
+
             <Button
               type="button"
               label="Test Connection"
@@ -192,7 +192,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               className="w-full p-button-secondary"
               onClick={testConnection}
             />
-            
+
             <Button
               type="button"
               label="Test Signup"
@@ -200,7 +200,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               className="w-full p-button-outlined"
               onClick={testSignupFunction}
             />
-            
+
             <Button
               type="button"
               label="Test Database"
