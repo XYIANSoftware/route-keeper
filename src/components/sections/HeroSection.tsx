@@ -2,9 +2,9 @@
 
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks';
 import Link from 'next/link';
-import { LoadingImage } from '@/components/common/LoadingImage';
+import { LoadingImage } from '@/components';
 
 export function HeroSection() {
   const { user: authUser } = useAuth();

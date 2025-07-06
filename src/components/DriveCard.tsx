@@ -5,7 +5,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Drive } from '@/types';
-import { useDrive } from '@/hooks/useDrive';
+import { useDrive } from '@/hooks';
 
 interface DriveCardProps {
   drive?: Drive;

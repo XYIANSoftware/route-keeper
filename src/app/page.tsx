@@ -1,9 +1,6 @@
 'use client';
 
-import { HeroSection } from '@/components/sections/HeroSection';
-import { FeaturesSection } from '@/components/sections/FeaturesSection';
-import { StatsSection } from '@/components/sections/StatsSection';
-import { CTASection } from '@/components/sections/CTASection';
+import { HeroSection, FeaturesSection, StatsSection, CTASection } from '@/components';
 
 export default function HomePage() {
   return (

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from 'primereact/button';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks';
 import Link from 'next/link';
 
 export function CTASection() {

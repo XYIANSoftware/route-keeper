@@ -2,7 +2,7 @@
 
 import { Card } from 'primereact/card';
 import Link from 'next/link';
-import { LoadingImage } from '@/components/common/LoadingImage';
+import { LoadingImage } from '@/components';
 
 export default function PrivacyPage() {
   return (

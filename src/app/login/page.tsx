@@ -5,9 +5,9 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks';
 import Link from 'next/link';
-import { LoadingImage } from '@/components/common/LoadingImage';
+import { LoadingImage } from '@/components';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

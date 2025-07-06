@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 import { Image } from 'primereact/image';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

@@ -8,10 +8,10 @@ import { FormPassword } from '@/components/inputs/FormPassword';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '@/hooks/useAuth';
-import { testSupabaseConnection, testSignup, testDatabaseConnection } from '@/lib/supabase';
+import { useAuth } from '@/hooks';
+import { testSupabaseConnection, testSignup, testDatabaseConnection } from '@/lib';
 import Link from 'next/link';
-import { LoadingImage } from '@/components/common/LoadingImage';
+import { LoadingImage } from '@/components';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),

@@ -1,7 +1,6 @@
 import './globals.css';
-import { PrimeReactProvider } from '@/providers/primereact-provider';
-import { AppContextProvider } from '@/providers/app-context';
-import { Header } from '@/components/layout/Header';
+import { PrimeReactProvider, AppContextProvider } from '@/providers';
+import { Header } from '@/components';
 
 export const metadata = {
   title: {

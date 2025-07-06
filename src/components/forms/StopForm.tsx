@@ -5,9 +5,9 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { FormDropdown } from '@/components/inputs/FormDropdown';
 import { FormTextarea } from '@/components/inputs/FormTextarea';
-import { useDrive } from '@/providers/app-context';
+import { useDrive } from '@/providers';
 import { Stop } from '@/types';
-import { STOP_CATEGORIES } from '@/constants/stops';
+import { STOP_CATEGORIES } from '@/constants';
 
 interface StopFormProps {
   visible: boolean;

@@ -1,3 +1,3 @@
 // Providers barrel exports
-export * from './app-context';
-export * from './primereact-provider';
+export { AppContextProvider, useAuth, useDrive } from './app-context';
+export { PrimeReactProvider } from './primereact-provider';

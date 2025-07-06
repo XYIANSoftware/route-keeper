@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
-import { useAuth } from '@/providers/app-context';
+import { useAuth } from '@/providers';
 import Link from 'next/link';
-import { LoadingImage } from '@/components/common/LoadingImage';
+import { LoadingImage } from '@/components';
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);

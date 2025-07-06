@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User, Drive, Stop } from '@/types';
-import { supabase, TABLES } from '@/lib/supabase-config';
+import { supabaseConfigClient as supabase, TABLES } from '@/lib';
 
 interface AppContextType {
   user: User | null;
