@@ -91,37 +91,66 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    console.log('signIn called with:', { email });
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    console.log('signIn result:', { data, error });
     if (error) throw error;
   };
 
   const signUp = async (email: string, password: string, username: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username,
+    console.log('signUp called with:', { email, username });
+    
+    try {
+      // First, try to sign up the user
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+          },
         },
-      },
-    });
-
-    if (error) {
-      // Provide more specific error messages
-      if (error.message.includes('Database error')) {
-        throw new Error(
-          'Database setup required. Please contact support or check if the database schema has been initialized.'
-        );
+      });
+      
+      console.log('signUp result:', { data, error });
+      
+      if (error) {
+        console.error('Signup error:', error);
+        throw error;
       }
+      
+      // If signup is successful but user needs email confirmation
+      if (data.user && !data.session) {
+        console.log('User created but needs email confirmation');
+        alert('Please check your email and confirm your account before signing in.');
+        return;
+      }
+      
+      // If we have a session, manually create the profile
+      if (data.user && data.session) {
+        try {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              username: username,
+              email: email,
+            });
+          
+          if (profileError) {
+            console.warn('Profile creation error (might already exist):', profileError);
+          }
+        } catch (profileError) {
+          console.warn('Profile creation failed:', profileError);
+        }
+      }
+      
+    } catch (error) {
+      console.error('Signup failed:', error);
       throw error;
-    }
-
-    // If signup is successful but email confirmation is required
-    if (data.user && !data.session) {
-      throw new Error('Please check your email to confirm your account before signing in.');
     }
   };
 

@@ -1,43 +1,5 @@
-@import '../styles/index.css';
-
-/* Custom styles */
-html {
-  scroll-behavior: smooth;
-}
+/* @import '../styles/index.css'; */
 
 body {
-  background-image: url('/bg-1.png');
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 100vh;
-}
-
-/* Parallax background effect */
-.parallax-bg {
-  background-image: url('/bg-1.png');
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
-/* Overlay for better text readability */
-.parallax-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 0;
-}
-
-/* Ensure content is above the overlay */
-.parallax-bg > * {
-  position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
