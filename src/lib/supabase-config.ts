@@ -7,10 +7,18 @@ export const supabase = createClient(API_ENDPOINTS.supabase.url, API_ENDPOINTS.s
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storageKey: 'sb-auth-token',
+    flowType: 'pkce',
   },
   realtime: {
     params: {
       eventsPerSecond: 10,
+    },
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'route-keeper-web',
     },
   },
 });

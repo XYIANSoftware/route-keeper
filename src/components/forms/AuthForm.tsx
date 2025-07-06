@@ -74,6 +74,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               width={32}
               height={32}
               className="w-8 h-8"
+              priority
             />
             <span className="text-2xl font-bold text-surface-900 dark:text-surface-0">
               RouteKeeper

@@ -50,9 +50,53 @@ src/
 
 ## 🚀 Quick Start
 
+### For Users
+
 1. Visit the live application at [routekeeper.app](https://routekeeper.app)
 2. Create an account or sign in
 3. Start tracking your drives and stops
+
+### For Developers
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/yourusername/route-keeper.git
+   cd route-keeper
+   ```
+
+2. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables
+
+   ```bash
+   cp env.template .env.local
+   ```
+
+   Edit `.env.local` and add your Supabase credentials:
+
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url_here
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+   ```
+
+4. Set up your Supabase database
+
+   - Create a new project at [supabase.com](https://supabase.com)
+   - Go to the SQL Editor in your dashboard
+   - Run the contents of `supasetup.sql` to create the required tables and functions
+
+5. Start the development server
+
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## 🎨 Design
 

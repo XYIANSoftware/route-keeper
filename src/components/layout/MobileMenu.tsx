@@ -65,6 +65,7 @@ export function MobileMenu() {
                 width={32}
                 height={32}
                 className="w-8 h-8"
+                priority
               />
               <span className="text-lg font-bold text-surface-900 dark:text-surface-0">
                 RouteKeeper

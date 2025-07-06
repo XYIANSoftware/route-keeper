@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { supabase, TABLES } from '@/lib/supabase-config';
+import { supabase } from '@/lib/supabase-config';
 
 export function DatabaseStatus() {
   const [status, setStatus] = useState<'checking' | 'connected' | 'error'>('checking');
@@ -15,18 +15,56 @@ export function DatabaseStatus() {
 
   const checkDatabaseStatus = async () => {
     try {
-      // Try to query the profiles table to see if it exists
-      const { error } = await supabase.from(TABLES.profiles).select('count').limit(1);
-
-      if (error) {
+      // Check if Supabase is configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         setStatus('error');
-        setError('Database schema not set up. Please run the SQL setup script.');
+        setError(
+          'Supabase configuration missing. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
+        );
+        return;
+      }
+
+      console.log('Checking database connection...');
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log(
+        'Supabase Key (first 20 chars):',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + '...'
+      );
+
+      // First, test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('profiles')
+        .select('count')
+        .limit(1);
+
+      console.log('Test query result:', { testData, testError });
+
+      if (testError) {
+        console.error('Database check error:', testError);
+        setStatus('error');
+
+        if (
+          testError.message.includes('relation') ||
+          testError.message.includes('does not exist')
+        ) {
+          setError(
+            'Database schema not set up. Please run the SQL setup script in your Supabase dashboard. The profiles table does not exist.'
+          );
+        } else if (testError.message.includes('Invalid API key')) {
+          setError('Invalid Supabase configuration. Please check your API keys.');
+        } else if (testError.message.includes('JWT')) {
+          setError('Authentication error. Please check your Supabase configuration.');
+        } else {
+          setError(`Database connection error: ${testError.message}`);
+        }
       } else {
+        console.log('Database connection successful!');
         setStatus('connected');
       }
-    } catch {
+    } catch (error) {
+      console.error('Database check exception:', error);
       setStatus('error');
-      setError('Unable to connect to database.');
+      setError('Unable to connect to database. Please check your Supabase configuration.');
     }
   };
 

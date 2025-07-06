@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState, useEffect } from 'react';
+import { ReactNode, createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User, Drive, Stop } from '@/types';
 import { supabase, TABLES } from '@/lib/supabase-config';
 
@@ -54,18 +54,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Load current drive and drives when user changes
-  useEffect(() => {
-    if (user) {
-      loadCurrentDrive();
-      loadDrives();
-    } else {
-      setCurrentDrive(null);
-      setDrives([]);
-    }
-  }, [user]);
-
-  const loadCurrentDrive = async () => {
+  const loadCurrentDrive = useCallback(async () => {
     if (!user) return;
 
     const { data } = await supabase
@@ -76,9 +65,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       .single();
 
     setCurrentDrive(data);
-  };
+  }, [user]);
 
-  const loadDrives = async () => {
+  const loadDrives = useCallback(async () => {
     if (!user) return;
 
     const { data } = await supabase
@@ -88,7 +77,18 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       .order('start_time', { ascending: false });
 
     setDrives(data || []);
-  };
+  }, [user]);
+
+  // Load current drive and drives when user changes
+  useEffect(() => {
+    if (user) {
+      loadCurrentDrive();
+      loadDrives();
+    } else {
+      setCurrentDrive(null);
+      setDrives([]);
+    }
+  }, [user, loadCurrentDrive, loadDrives]);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -99,6 +99,14 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      throw new Error(
+        'Supabase configuration missing. Please check your environment variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY).'
+      );
+    }
+
+    // Create the user account
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -110,19 +118,55 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     });
 
     if (error) {
+      console.error('Signup error details:', error);
+      console.error('Error code:', error.status);
+      console.error('Error message:', error.message);
+
+      // Handle rate limiting
+      if (error.status === 429) {
+        throw new Error('Too many signup attempts. Please wait a moment before trying again.');
+      }
+
       // Provide more specific error messages
-      if (error.message.includes('Database error')) {
+      if (
+        error.message.includes('Database error') ||
+        error.message.includes('relation') ||
+        error.message.includes('does not exist') ||
+        error.message.includes('table') ||
+        error.message.includes('schema')
+      ) {
         throw new Error(
-          'Database setup required. Please contact support or check if the database schema has been initialized.'
+          'Database setup required. Please run the SQL setup script in your Supabase dashboard. The profiles table or trigger function may not exist.'
         );
       }
-      throw error;
+
+      if (error.message.includes('Invalid API key') || error.status === 401) {
+        throw new Error(
+          'Invalid Supabase configuration. Please check your API keys in the environment variables.'
+        );
+      }
+
+      if (error.message.includes('Email not confirmed')) {
+        throw new Error('Please check your email to confirm your account before signing in.');
+      }
+
+      if (error.message.includes('JWT') || error.status === 403) {
+        throw new Error('Authentication error. Please check your Supabase configuration.');
+      }
+
+      // Generic error with more details
+      throw new Error(`Signup failed: ${error.message}`);
     }
 
     // If signup is successful but email confirmation is required
     if (data.user && !data.session) {
+      // Profile should have been created by the trigger function
+      // No need to manually create it
       throw new Error('Please check your email to confirm your account before signing in.');
     }
+
+    // If we get here, signup was successful and user is automatically signed in
+    console.log('Signup successful and user signed in automatically');
   };
 
   const signOut = async () => {
