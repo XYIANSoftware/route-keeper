@@ -8,20 +8,21 @@ import { Password } from 'primereact/password';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function SignupPage() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signIn, loading } = useAuth();
+  const { signUp, loading } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log('Attempting login with:', { email });
-      await signIn(email, password);
-      console.log('Login successful');
+      console.log('Attempting signup with:', { email, username });
+      await signUp(email, password, username);
+      console.log('Signup successful');
     } catch (error) {
-      console.error('Login error:', error);
-      alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Signup error:', error);
+      alert(`Signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -36,14 +37,28 @@ export default function LoginPage() {
             </span>
           </Link>
           <h1 className="text-xl font-semibold text-gray-800">
-            Welcome Back
+            Create Account
           </h1>
           <p className="text-gray-600">
-            Sign in to your account
+            Sign up to start tracking your drives
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <InputText
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              className="w-full"
+              required
+            />
+          </div>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -76,8 +91,8 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            label="Sign In"
-            icon="pi pi-sign-in"
+            label="Sign Up"
+            icon="pi pi-user-plus"
             className="w-full"
             loading={loading}
           />
@@ -85,13 +100,13 @@ export default function LoginPage() {
 
         <div className="text-center mt-6">
           <Link 
-            href="/signup" 
+            href="/login" 
             className="text-blue-600 hover:text-blue-800 transition-colors"
           >
-            Don't have an account? Sign up
+            Already have an account? Sign in
           </Link>
         </div>
       </Card>
     </div>
   );
-}
+} 

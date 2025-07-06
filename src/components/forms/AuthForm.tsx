@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
+import { testSupabaseConnection, testSignup, testDatabaseConnection } from '@/lib/supabase';
 import Link from 'next/link';
 import { LoadingImage } from '@/components/common/LoadingImage';
 
@@ -45,21 +46,71 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   const onLoginSubmit = async (data: LoginForm) => {
     try {
-      setError(null);
+      console.log('Attempting login with:', { email: data.email });
       await signIn(data.email, data.password);
+      console.log('Login successful');
     } catch (error) {
       console.error('Login error:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred during login');
+      alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
   const onSignupSubmit = async (data: SignupForm) => {
     try {
-      setError(null);
+      console.log('Attempting signup with:', { email: data.email, username: data.username });
       await signUp(data.email, data.password, data.username);
+      console.log('Signup successful');
     } catch (error) {
       console.error('Signup error:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred during signup');
+      alert(`Signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const testConnection = async () => {
+    try {
+      const result = await testSupabaseConnection();
+      alert(result ? 'Supabase connection successful!' : 'Supabase connection failed. Check console for details.');
+    } catch (error) {
+      alert(`Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const testSignupFunction = async () => {
+    try {
+      const testEmail = `test${Date.now()}@example.com`;
+      const testPassword = 'testpassword123';
+      
+      console.log('Testing signup with:', { testEmail, testPassword });
+      
+      const result = await testSignup(testEmail, testPassword);
+      
+      if (result.success) {
+        alert('Test signup successful! Check console for details.');
+      } else {
+        const errorMessage = result.error && typeof result.error === 'object' && 'message' in result.error 
+          ? result.error.message 
+          : 'Unknown error';
+        alert(`Test signup failed: ${errorMessage}`);
+      }
+    } catch (error) {
+      alert(`Test signup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const testDatabase = async () => {
+    try {
+      const result = await testDatabaseConnection();
+      
+      if (result.success) {
+        alert('Database connection successful! Check console for details.');
+      } else {
+        const errorMessage = result.error && typeof result.error === 'object' && 'message' in result.error 
+          ? result.error.message 
+          : 'Unknown error';
+        alert(`Database connection failed: ${errorMessage}`);
+      }
+    } catch (error) {
+      alert(`Database test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -132,6 +183,30 @@ export function AuthForm({ mode }: AuthFormProps) {
               icon="pi pi-user-plus"
               className="w-full p-button-primary"
               loading={loading}
+            />
+            
+            <Button
+              type="button"
+              label="Test Connection"
+              icon="pi pi-refresh"
+              className="w-full p-button-secondary"
+              onClick={testConnection}
+            />
+            
+            <Button
+              type="button"
+              label="Test Signup"
+              icon="pi pi-user-plus"
+              className="w-full p-button-outlined"
+              onClick={testSignupFunction}
+            />
+            
+            <Button
+              type="button"
+              label="Test Database"
+              icon="pi pi-database"
+              className="w-full p-button-outlined"
+              onClick={testDatabase}
             />
           </form>
         ) : (
