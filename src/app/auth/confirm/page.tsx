@@ -19,12 +19,24 @@ function ConfirmEmailForm() {
   useEffect(() => {
     const handleEmailConfirmation = async () => {
       try {
+        // Get all possible URL parameters
         const token_hash = searchParams.get('token_hash');
         const type = searchParams.get('type');
+        const access_token = searchParams.get('access_token');
+        const refresh_token = searchParams.get('refresh_token');
+        const token = searchParams.get('token');
 
-        // Check if this is an email confirmation
+        console.log('URL Parameters:', {
+          token_hash,
+          type,
+          access_token: access_token ? 'present' : 'missing',
+          refresh_token: refresh_token ? 'present' : 'missing',
+          token: token ? 'present' : 'missing',
+        });
+
+        // Method 1: PKCE Flow (token_hash + type)
         if (type === 'signup' && token_hash) {
-          console.log('Processing email confirmation...');
+          console.log('Processing PKCE email confirmation...');
 
           const { data, error } = await supabase.auth.verifyOtp({
             token_hash,
@@ -32,7 +44,7 @@ function ConfirmEmailForm() {
           });
 
           if (error) {
-            console.error('Email confirmation error:', error);
+            console.error('PKCE confirmation error:', error);
 
             if (error.message.includes('expired')) {
               setStatus('expired');
@@ -60,11 +72,77 @@ function ConfirmEmailForm() {
             setStatus('error');
             setMessage('Confirmation failed. Please try again.');
           }
-        } else {
-          // No confirmation parameters found
-          setStatus('error');
-          setMessage('Invalid confirmation link. Please check your email for the correct link.');
+          return;
         }
+
+        // Method 2: JWT Flow (access_token + refresh_token)
+        if (access_token && refresh_token) {
+          console.log('Processing JWT email confirmation...');
+
+          const { data, error } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
+
+          if (error) {
+            console.error('JWT confirmation error:', error);
+            setStatus('error');
+            setMessage(`Confirmation failed: ${error.message}`);
+            return;
+          }
+
+          if (data.user) {
+            console.log('Email confirmed successfully for user:', data.user.id);
+            setStatus('success');
+            setMessage('Your email has been confirmed successfully! You can now sign in.');
+
+            // Redirect to login after a short delay
+            setTimeout(() => {
+              router.push('/login?confirmed=true');
+            }, 3000);
+          } else {
+            setStatus('error');
+            setMessage('Confirmation failed. Please try again.');
+          }
+          return;
+        }
+
+        // Method 3: Legacy token format
+        if (type === 'signup' && token) {
+          console.log('Processing legacy token confirmation...');
+
+          const { data, error } = await supabase.auth.verifyOtp({
+            token_hash: token, // Try using token as token_hash
+            type: 'signup',
+          });
+
+          if (error) {
+            console.error('Legacy confirmation error:', error);
+            setStatus('error');
+            setMessage(`Confirmation failed: ${error.message}`);
+            return;
+          }
+
+          if (data.user) {
+            console.log('Email confirmed successfully for user:', data.user.id);
+            setStatus('success');
+            setMessage('Your email has been confirmed successfully! You can now sign in.');
+
+            // Redirect to login after a short delay
+            setTimeout(() => {
+              router.push('/login?confirmed=true');
+            }, 3000);
+          } else {
+            setStatus('error');
+            setMessage('Confirmation failed. Please try again.');
+          }
+          return;
+        }
+
+        // No valid confirmation parameters found
+        console.log('No valid confirmation parameters found');
+        setStatus('error');
+        setMessage('Invalid confirmation link. Please check your email for the correct link.');
       } catch (error) {
         console.error('Confirmation error:', error);
         setStatus('error');
