@@ -116,7 +116,7 @@ export function DriveCard({ drive }: DriveCardProps) {
     if (currentDrive && !currentDrive.end_time) {
       setTotalDistance(0);
     }
-  }, [currentDrive?.id]);
+  }, [currentDrive]);
 
   const formatTime = (ms: number) => {
     const hours = Math.floor(ms / (1000 * 60 * 60));
