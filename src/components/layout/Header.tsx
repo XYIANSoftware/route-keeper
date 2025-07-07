@@ -44,7 +44,7 @@ export function Header() {
       {/* Mobile Header - Fixed at top */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
         <div className="flex align-items-center justify-content-between px-4 py-3">
-          <Link href="/" className="flex align-items-center">
+          <div className="flex align-items-center">
             <Image
               src="/icon-1.png"
               alt="RouteKeeper"
@@ -53,7 +53,7 @@ export function Header() {
               className="w-12 h-12 mr-3"
             />
             <span className="text-xl font-bold">RouteKeeper</span>
-          </Link>
+          </div>
 
           <div className="flex align-items-center gap-2">
             {user ? (
@@ -82,7 +82,7 @@ export function Header() {
       {/* Desktop Header - Fixed at top */}
       <header className="fixed top-0 left-0 right-0 z-50 hidden lg:block bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg">
         <div className="flex align-items-center justify-content-between px-6 py-4 max-w-screen-xl mx-auto">
-          <Link href="/" className="flex align-items-center">
+          <div className="flex align-items-center">
             <Image
               src="/icon-1.png"
               alt="RouteKeeper"
@@ -94,7 +94,7 @@ export function Header() {
               <h1 className="text-2xl font-bold m-0">RouteKeeper</h1>
               <p className="text-amber-200 text-sm m-0">Professional Route Tracking</p>
             </div>
-          </Link>
+          </div>
 
           <nav className="flex align-items-center gap-4">
             {navigationItems.map(item => (

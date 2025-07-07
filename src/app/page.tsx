@@ -7,15 +7,6 @@ export default function HomePage() {
     <div className="w-full max-w-6xl mx-auto px-4">
       {/* Hero Section */}
       <HeroSection />
-
-      {/* Features Section */}
-      <FeaturesSection />
-
-      {/* Stats Section */}
-      <StatsSection />
-
-      {/* CTA Section */}
-      <CTASection />
     </div>
   );
 }
