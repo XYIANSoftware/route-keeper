@@ -1,6 +1,7 @@
 import './globals.css';
 import { PrimeReactProvider, AppContextProvider } from '@/providers';
 import { Header } from '@/components';
+import { DebugAuth } from '@/components/DebugAuth';
 
 export const metadata = {
   title: {
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AppContextProvider>
             <Header />
             <main>{children}</main>
+            <DebugAuth />
           </AppContextProvider>
         </PrimeReactProvider>
       </body>
