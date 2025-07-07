@@ -5,9 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Card } from 'primereact/card';
 import { Drive, DriveWithStops } from '@/types';
-import Link from 'next/link';
 import { useDrive } from '@/hooks';
 import { supabase } from '@/lib/supabase-config';
 
@@ -61,9 +59,8 @@ export function DriveList() {
     return null;
   };
 
-
-
-  const stopsTemplate = (drive: Drive) => {
+  // Replace stopsTemplate with a React component
+  function StopsTemplate({ drive }: { drive: Drive }) {
     const [stopCount, setStopCount] = useState<number>(0);
     const [loadingCount, setLoadingCount] = useState(true);
 
@@ -74,7 +71,6 @@ export function DriveList() {
             .from('stops')
             .select('*', { count: 'exact', head: true })
             .eq('drive_id', drive.id);
-          
           if (error) {
             console.error(`Error loading stop count for drive ${drive.id}:`, error);
             setStopCount(0);
@@ -88,7 +84,6 @@ export function DriveList() {
           setLoadingCount(false);
         }
       };
-
       loadStopCount();
     }, [drive.id]);
 
@@ -98,7 +93,7 @@ export function DriveList() {
         <span>{loadingCount ? '...' : stopCount}</span>
       </div>
     );
-  };
+  }
 
   const actionsTemplate = (drive: Drive) => {
     return (
@@ -234,7 +229,7 @@ export function DriveList() {
           </p>
           {selectedDrive.stops && selectedDrive.stops.length > 0 ? (
             <div className="space-y-2">
-              {selectedDrive.stops.map((stop, index) => (
+              {selectedDrive.stops.map((stop) => (
                 <div key={stop.id} className="p-3 border border-surface-200 dark:border-surface-700 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -314,7 +309,7 @@ export function DriveList() {
         <Column
           field="stops"
           header="Stops"
-          body={stopsTemplate}
+          body={drive => <StopsTemplate drive={drive} />}
           className="min-w-[80px] text-center"
         />
         <Column

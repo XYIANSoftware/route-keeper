@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -21,7 +21,6 @@ export function DriveCard({ drive }: DriveCardProps) {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [startLocation, setStartLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
   const [endLocation, setEndLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
-  const [mapLoaded, setMapLoaded] = useState(false);
   const [stopFormVisible, setStopFormVisible] = useState(false);
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [stops, setStops] = useState<Stop[]>([]);
@@ -61,7 +60,7 @@ export function DriveCard({ drive }: DriveCardProps) {
               setStartLocation(newLocation);
             }
           },
-          (err) => {
+          () => {
             setLocation({ latitude: null, longitude: null });
             setLocationError('Unable to retrieve location.');
           },
@@ -85,7 +84,7 @@ export function DriveCard({ drive }: DriveCardProps) {
     return () => {
       if (gpsInterval) clearInterval(gpsInterval);
     };
-  }, [currentDrive, startLocation.latitude, startLocation.longitude, location.latitude, location.longitude]);
+  }, [currentDrive, startLocation.latitude, startLocation.longitude, location]);
 
   const formatTime = (ms: number) => {
     const hours = Math.floor(ms / (1000 * 60 * 60));
