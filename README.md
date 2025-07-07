@@ -56,9 +56,10 @@ npm install
 cp .env.template .env.local
 ```
 
-4. Configure your Supabase credentials in `.env.local`:
+4. Configure your environment variables in `.env.local`:
 
 ```env
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
@@ -150,6 +151,8 @@ src/
 
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+
+**Geocoding Service:** RouteKeeper uses [Geocode.maps](https://geocode.maps.co/) for reverse geocoding, which is free and doesn't require an API key.
 
 ## 📄 Legal
 

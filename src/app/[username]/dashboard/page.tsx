@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation';
 export default function DashboardPage() {
   const { username } = useParams<{ username: string }>();
   const { user, loading: authLoading } = useAuth();
-  const { currentDrive, loading: driveLoading } = useDrive();
+  const { loading: driveLoading } = useDrive();
   const [stopFormVisible, setStopFormVisible] = useState(false);
 
   // Redirect if user doesn't match URL or not authenticated
@@ -70,21 +70,7 @@ export default function DashboardPage() {
           </section>
 
           {/* Quick Actions */}
-          {currentDrive && (
-            <section>
-              <Card className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    label="Add Stop"
-                    icon="pi pi-plus"
-                    className="p-button-outlined"
-                    onClick={() => setStopFormVisible(true)}
-                  />
-                  <Button label="View Drive Details" icon="pi pi-eye" className="p-button-text" />
-                </div>
-              </Card>
-            </section>
-          )}
+           
 
           {/* Drive History */}
           <section>

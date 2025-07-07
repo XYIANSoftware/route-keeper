@@ -273,7 +273,22 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   };
 
   const addStop = async (category: Stop['category'], notes?: string) => {
-    if (!currentDrive) return;
+    console.log('addStop called with:', { category, notes, currentDrive });
+    
+    if (!currentDrive) {
+      console.error('No current drive found');
+      throw new Error('No active drive found');
+    }
+
+    // Check if current drive exists in database
+    console.log('Checking if current drive exists in database...');
+    const { data: driveCheck, error: driveError } = await supabase
+      .from(TABLES.drives)
+      .select('id, user_id')
+      .eq('id', currentDrive.id)
+      .single();
+    
+    console.log('Drive check result:', { driveCheck, driveError });
 
     // Get current GPS coordinates
     let latitude = null;
@@ -289,20 +304,38 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         });
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
+        console.log('GPS coordinates obtained:', { latitude, longitude });
       } catch (error) {
         console.warn('Could not get GPS coordinates:', error);
       }
     }
 
-    const { error } = await supabase.from(TABLES.stops).insert({
+    const stopData = {
       drive_id: currentDrive.id,
       category,
       notes,
       latitude,
       longitude,
-    });
+    };
 
-    if (error) throw error;
+    console.log('Inserting stop data:', stopData);
+
+    // First, let's test if we can query the stops table
+    const { data: testData, error: testError } = await supabase
+      .from(TABLES.stops)
+      .select('*')
+      .limit(1);
+    
+    console.log('Test query result:', { testData, testError });
+
+    const { data, error } = await supabase.from(TABLES.stops).insert(stopData).select();
+
+    if (error) {
+      console.error('Error inserting stop:', error);
+      throw error;
+    }
+
+    console.log('Stop added successfully:', data);
   };
 
   const value: AppContextType = {
