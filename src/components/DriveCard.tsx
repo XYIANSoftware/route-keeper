@@ -34,7 +34,7 @@ export function DriveCard({ drive }: DriveCardProps) {
       interval = setInterval(() => {
         const start = new Date(currentDrive.start_time).getTime();
         const now = new Date().getTime();
-        setElapsedTime(now - start);
+        setElapsedTime(now - start); 
       }, 1000);
     }
     return () => {
