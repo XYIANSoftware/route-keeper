@@ -30,9 +30,17 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     // First, check for existing session
     const initializeAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        console.log('Initializing auth state...');
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error('Error getting session:', sessionError);
+        }
+        
+        console.log('Session check result:', { session: !!session, user: session?.user?.email });
         
         if (session?.user) {
+          console.log('User found in session, fetching profile...');
           // Fetch user profile
           const { data: profile, error } = await supabase
             .from(TABLES.profiles)
@@ -42,8 +50,15 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
           if (error) {
             console.error('Error fetching profile during init:', error);
-            setUser(null);
+            // Don't set user to null if profile fetch fails, keep the session user
+            console.log('Keeping session user despite profile fetch error');
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              username: session.user.email?.split('@')[0] || 'user', // Fallback username
+            });
           } else if (profile) {
+            console.log('Profile found:', profile.username);
             setUser({
               id: session.user.id,
               email: session.user.email!,
@@ -51,9 +66,15 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
             });
           } else {
             console.error('No profile found for user during init:', session.user.id);
-            setUser(null);
+            // Don't set user to null, use fallback
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              username: session.user.email?.split('@')[0] || 'user', // Fallback username
+            });
           }
         } else {
+          console.log('No session found, setting user to null');
           setUser(null);
         }
       } catch (error) {
@@ -84,7 +105,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
           if (error) {
             console.error('Error fetching profile:', error);
-            setUser(null);
+            // Don't set user to null if profile fetch fails
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              username: session.user.email?.split('@')[0] || 'user', // Fallback username
+            });
           } else if (profile) {
             setUser({
               id: session.user.id,
@@ -93,11 +119,23 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
             });
           } else {
             console.error('No profile found for user:', session.user.id);
-            setUser(null);
+            // Don't set user to null, use fallback
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              username: session.user.email?.split('@')[0] || 'user', // Fallback username
+            });
           }
         } catch (error) {
           console.error('Error in auth state change:', error);
-          setUser(null);
+          // Don't set user to null on error, keep the session
+          if (session?.user) {
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              username: session.user.email?.split('@')[0] || 'user', // Fallback username
+            });
+          }
         }
       } else {
         setUser(null);

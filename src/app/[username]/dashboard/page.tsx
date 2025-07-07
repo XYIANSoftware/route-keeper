@@ -15,9 +15,17 @@ export default function DashboardPage() {
 
   // Redirect if user doesn't match URL or not authenticated
   useEffect(() => {
+    console.log('Dashboard auth check:', { 
+      authLoading, 
+      user: user?.username, 
+      urlUsername: username,
+      userExists: !!user 
+    });
+    
     if (!authLoading && (!user || user.username !== username)) {
-      // TODO: Redirect to login or show error
       console.log('User mismatch or not authenticated');
+      console.log('User:', user);
+      console.log('URL username:', username);
     }
   }, [user, username, authLoading]);
 
