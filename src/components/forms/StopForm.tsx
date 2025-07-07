@@ -23,11 +23,18 @@ export function StopForm({ visible, onHide }: StopFormProps) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!category) return;
+    console.log('StopForm handleSubmit called with:', { category, notes });
+    
+    if (!category) {
+      console.error('No category selected');
+      return;
+    }
 
     setLoading(true);
     try {
+      console.log('Calling addStop function...');
       await addStop(category, notes || undefined);
+      console.log('addStop completed successfully');
       handleReset();
       onHide();
     } catch (error) {

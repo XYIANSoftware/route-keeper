@@ -70,21 +70,7 @@ export default function DashboardPage() {
           </section>
 
           {/* Quick Actions */}
-          {currentDrive && (
-            <section>
-              <Card className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    label="Add Stop"
-                    icon="pi pi-plus"
-                    className="p-button-outlined"
-                    onClick={() => setStopFormVisible(true)}
-                  />
-                  <Button label="View Drive Details" icon="pi pi-eye" className="p-button-text" />
-                </div>
-              </Card>
-            </section>
-          )}
+          
 
           {/* Drive History */}
           <section>
