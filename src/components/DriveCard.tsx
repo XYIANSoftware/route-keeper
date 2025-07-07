@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -25,6 +25,8 @@ export function DriveCard({ drive }: DriveCardProps) {
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [stops, setStops] = useState<Stop[]>([]);
   const [loadingStops, setLoadingStops] = useState(false);
+  const [totalDistance, setTotalDistance] = useState(0);
+  const previousLocationRef = useRef<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
 
   // Timer for drive duration
   useEffect(() => {
@@ -58,6 +60,7 @@ export function DriveCard({ drive }: DriveCardProps) {
             // Set start location if this is the first location or if start location is not set
             if (!startLocation.latitude || !startLocation.longitude) {
               setStartLocation(newLocation);
+              previousLocationRef.current = newLocation;
             }
           },
           () => {
@@ -85,6 +88,35 @@ export function DriveCard({ drive }: DriveCardProps) {
       if (gpsInterval) clearInterval(gpsInterval);
     };
   }, [currentDrive, startLocation.latitude, startLocation.longitude, location]);
+
+  // Track distance traveled in real-time
+  useEffect(() => {
+    if (currentDrive && !currentDrive.end_time && location.latitude && location.longitude && previousLocationRef.current.latitude && previousLocationRef.current.longitude) {
+      const distance = calculateDistance(
+        previousLocationRef.current.latitude,
+        previousLocationRef.current.longitude,
+        location.latitude,
+        location.longitude
+      );
+      
+      // Only add distance if it's reasonable (less than 1 mile per 10 seconds to avoid GPS jumps)
+      if (distance < 1) {
+        setTotalDistance(prev => prev + distance);
+      }
+    }
+    
+    // Update previous location for next calculation
+    if (location.latitude && location.longitude) {
+      previousLocationRef.current = location;
+    }
+  }, [location, currentDrive]);
+
+  // Reset total distance when starting a new drive
+  useEffect(() => {
+    if (currentDrive && !currentDrive.end_time) {
+      setTotalDistance(0);
+    }
+  }, [currentDrive?.id]);
 
   const formatTime = (ms: number) => {
     const hours = Math.floor(ms / (1000 * 60 * 60));
@@ -229,7 +261,7 @@ export function DriveCard({ drive }: DriveCardProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
             <div>
               <p className="text-sm text-surface-600 dark:text-surface-400">Duration</p>
               <div className="text-xl font-mono font-bold text-surface-900 dark:text-surface-0">
@@ -255,6 +287,14 @@ export function DriveCard({ drive }: DriveCardProps) {
                 {isActive ? 'In Progress' : 'Completed'}
               </p>
             </div>
+            {isActive && (
+              <div>
+                <p className="text-sm text-surface-600 dark:text-surface-400">Miles Driven</p>
+                <div className="text-xl font-mono font-bold text-surface-900 dark:text-surface-0">
+                  {totalDistance.toFixed(2)} mi
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Distance Display */}
@@ -369,7 +409,10 @@ export function DriveCard({ drive }: DriveCardProps) {
                   <p><strong>End:</strong> {endLocation.latitude.toFixed(6)}, {endLocation.longitude.toFixed(6)}</p>
                 )}
                 {getDriveDistance() !== null && (
-                  <p><strong>Distance:</strong> {getDriveDistance()?.toFixed(2)} miles</p>
+                  <p><strong>Total Distance:</strong> {getDriveDistance()?.toFixed(2)} miles</p>
+                )}
+                {isActive && totalDistance > 0 && (
+                  <p><strong>Miles Driven:</strong> {totalDistance.toFixed(2)} miles</p>
                 )}
               </div>
             </div>

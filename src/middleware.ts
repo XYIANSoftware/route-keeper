@@ -1,8 +1,62 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: any) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+        },
+      },
+    }
+  );
+
+  // Refresh session if expired
+  supabase.auth.getSession();
 
   // Security headers
   response.headers.set('X-Frame-Options', 'DENY');
@@ -30,20 +84,6 @@ export function middleware(request: NextRequest) {
   // Cache control for pages
   if (request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/login') {
     response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
-  }
-
-  // Handle authentication cookies
-  const authCookie = request.cookies.get('sb-auth-token');
-  if (authCookie) {
-    // Ensure the auth cookie is secure in production
-    if (process.env.NODE_ENV === 'production') {
-      response.cookies.set('sb-auth-token', authCookie.value, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      });
-    }
   }
 
   return response;
