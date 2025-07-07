@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -15,8 +15,9 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showConfirmationMessage, setShowConfirmationMessage] = useState(false);
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, user } = useAuth();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user was redirected from email confirmation
@@ -28,12 +29,20 @@ function LoginForm() {
     }
   }, [searchParams]);
 
+  // Redirect to dashboard when user is authenticated
+  useEffect(() => {
+    if (user && user.username) {
+      router.push(`/${user.username}/dashboard`);
+    }
+  }, [user, router]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       console.log('Attempting login with:', { email });
       await signIn(email, password);
       console.log('Login successful');
+      // The redirect will happen automatically via the useEffect above
     } catch (error) {
       console.error('Login error:', error);
       alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);

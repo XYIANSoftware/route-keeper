@@ -24,19 +24,19 @@ export function Header() {
 
   const navigationItems = [
     { label: 'Dashboard', href: user ? `/${user.username}/dashboard` : '/', icon: 'pi pi-home' },
-    { label: 'Drives', href: user ? `/${user.username}/drives` : '/', icon: 'pi pi-car' },
-    {
-      label: 'Analytics',
-      href: user ? `/${user.username}/analytics` : '/',
-      icon: 'pi pi-chart-bar',
-    },
-    { label: 'Settings', href: user ? `/${user.username}/settings` : '/', icon: 'pi pi-cog' },
+    // { label: 'Drives', href: user ? `/${user.username}/drives` : '/', icon: 'pi pi-car' },
+    // {
+    //   label: 'Analytics',
+    //   href: user ? `/${user.username}/analytics` : '/',
+    //   icon: 'pi pi-chart-bar',
+    // },
+    // { label: 'Settings', href: user ? `/${user.username}/settings` : '/', icon: 'pi pi-cog' },
   ];
 
   const mobileMenuItems = [
     ...navigationItems,
-    { label: 'Profile', href: user ? `/${user.username}/profile` : '/', icon: 'pi pi-user' },
-    { label: 'Help', href: '/help', icon: 'pi pi-question-circle' },
+    // { label: 'Profile', href: user ? `/${user.username}/profile` : '/', icon: 'pi pi-user' },
+    // { label: 'Help', href: '/help', icon: 'pi pi-question-circle' },
   ];
 
   return (
