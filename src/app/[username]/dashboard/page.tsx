@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation';
 export default function DashboardPage() {
   const { username } = useParams<{ username: string }>();
   const { user, loading: authLoading } = useAuth();
-  const { currentDrive, loading: driveLoading } = useDrive();
+  const { loading: driveLoading } = useDrive();
   const [stopFormVisible, setStopFormVisible] = useState(false);
 
   // Redirect if user doesn't match URL or not authenticated
