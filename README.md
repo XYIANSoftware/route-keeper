@@ -62,20 +62,7 @@ cp .env.template .env.local
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Google Maps API Key (for map display)
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
-
-**Google Maps Setup (for map display):**
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Enable these APIs:
-   - Maps JavaScript API
-4. Create credentials (API Key)
-5. Add the API key to your `.env.local` file
-
-**Note:** RouteKeeper uses [Geocode.maps](https://geocode.maps.co/) for reverse geocoding (converting coordinates to addresses). This service is free and doesn't require an API key.
 
 5. Run the development server:
 
@@ -164,7 +151,6 @@ src/
 
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
-- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`: Your Google Maps API key for map display (optional)
 
 **Geocoding Service:** RouteKeeper uses [Geocode.maps](https://geocode.maps.co/) for reverse geocoding, which is free and doesn't require an API key.
 

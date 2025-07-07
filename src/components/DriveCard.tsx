@@ -10,14 +10,6 @@ import { useDrive } from '@/providers/app-context';
 import { StopForm } from '@/components/forms/StopForm';
 import { supabase } from '@/lib/supabase-config';
 
-// Google Maps types
-declare global {
-  interface Window {
-    google: any;
-    initMap: () => void;
-  }
-}
-
 interface DriveCardProps {
   drive?: Drive;
 }
@@ -34,81 +26,6 @@ export function DriveCard({ drive }: DriveCardProps) {
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [stops, setStops] = useState<Stop[]>([]);
   const [loadingStops, setLoadingStops] = useState(false);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
-
-  // Load Google Maps API
-  useEffect(() => {
-    if (!window.google) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        setMapLoaded(true);
-        if (mapRef.current && location.latitude && location.longitude) {
-          initializeMap();
-        }
-      };
-      document.head.appendChild(script);
-    } else {
-      setMapLoaded(true);
-    }
-  }, []);
-
-  // Initialize Google Map
-  const initializeMap = () => {
-    if (!mapRef.current || !window.google || !location.latitude || !location.longitude) return;
-
-    const mapOptions = {
-      center: { lat: location.latitude, lng: location.longitude },
-      zoom: 15,
-      mapTypeId: window.google.maps.MapTypeId.ROADMAP,
-      styles: [
-        {
-          featureType: 'poi',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
-        }
-      ]
-    };
-
-    mapInstanceRef.current = new window.google.maps.Map(mapRef.current, mapOptions);
-
-    // Add marker for current location
-    markerRef.current = new window.google.maps.Marker({
-      position: { lat: location.latitude, lng: location.longitude },
-      map: mapInstanceRef.current,
-      title: 'Current Location',
-      icon: {
-        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="8" fill="#4285F4" stroke="white" stroke-width="2"/>
-            <circle cx="12" cy="12" r="3" fill="white"/>
-          </svg>
-        `),
-        scaledSize: new window.google.maps.Size(24, 24),
-        anchor: new window.google.maps.Point(12, 12)
-      }
-    });
-  };
-
-  // Update map when location changes
-  useEffect(() => {
-    if (mapInstanceRef.current && markerRef.current && location.latitude && location.longitude) {
-      const newPosition = { lat: location.latitude, lng: location.longitude };
-      mapInstanceRef.current.setCenter(newPosition);
-      markerRef.current.setPosition(newPosition);
-    }
-  }, [location.latitude, location.longitude]);
-
-  // Initialize map when both map and location are ready
-  useEffect(() => {
-    if (mapLoaded && mapRef.current && location.latitude && location.longitude && !mapInstanceRef.current) {
-      initializeMap();
-    }
-  }, [mapLoaded, location.latitude, location.longitude]);
 
   // Timer for drive duration
   useEffect(() => {
@@ -383,17 +300,6 @@ export function DriveCard({ drive }: DriveCardProps) {
                 </p>
               ) : (
                 <p className="text-surface-400 italic">Fetching location...</p>
-              )}
-              
-              {/* Google Map */}
-              {location.latitude && location.longitude && (
-                <div className="mt-3">
-                  <div 
-                    ref={mapRef} 
-                    className="w-full h-48 rounded-lg border border-surface-200 dark:border-surface-700"
-                    style={{ minHeight: '200px' }}
-                  />
-                </div>
               )}
             </div>
           )}
